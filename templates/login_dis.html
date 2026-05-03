@@ -4,10 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Discente</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center; /*centraliza horizontalmente*/
+            align-items: center; /*centraliza verticalmente*/
+            
+
+            background-image: url("{{ url_for('static', filename='imagens/fundinho,jpeg.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .container {
+            text-align: center;
+        }
+        
+        .quadrado{
+            width: 500px;
+            height: 500px;
+            background-color: rgb(165, 255, 252);
+            border-radius: 30px; /*bordas arredondadas*/
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 30px;
+            
+        } 
+        .logo {
+            width: 400px;
+            height: 130px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
-    <p1>Esta página é para fazer login.</p1>
+    <div class="container">  <!-- div = bloco, área estilizável -->
+        <div class ='quadrado'>
+            <div class='logo'>
+                <img src="{{ url_for('static', filename='imagens/logoprov.jpeg') }}" alt="Logo">
+        </div> <!-- class = dando nome a classe criada -->
+
+    </div>
     
 </body>
 </html>
