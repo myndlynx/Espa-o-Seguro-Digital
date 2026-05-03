@@ -13,7 +13,7 @@
             align-items: center; /*centraliza verticalmente*/
             
 
-            background-image: url("{{ url_for('static', filename='imagens/fundinho,jpeg.jpeg') }}");
+            background-image: url("{{ url_for('static', filename='imagens/fundinho.jpeg.png') }}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -24,15 +24,16 @@
         
         .quadrado{
             width: 500px;
-            height: 500px;
+            height: 400px;
             background-color: rgb(165, 255, 252);
             border-radius: 30px; /*bordas arredondadas*/
 
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* mantém tudo no topo */
+            gap: 40px; /* controle do espaço entre logo e form */
             padding-top: 30px;
-            
         } 
         .logo {
             width: 400px;
@@ -47,7 +48,50 @@
             width: 100%;
             height: 100%;
             object-fit: fill;
+            border-radius: 15px;
         }
+        .form-login {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .form-login input {
+            width: 100%;          /* deixa ocupar toda largura do form */
+            padding: 14px;        /* aumenta altura da caixa */
+            font-size: 16px;      /* aumenta texto */
+            border-radius: 8px;
+            border: 1px solid #ccc;
+
+        }
+        .form-login button {
+            width: 100%;
+            padding: 14px;
+            font-size: 17px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            background: #00bbd8;
+            color: white;
+            cursor: pointer;
+
+        }
+        .form-login button:hover {
+            background: #0056b3;
+            transform: scale(1.02);
+            transition: 0.2s;
+        }
+        .form-login input,
+        .form-login button {
+            box-sizing: border-box;
+        }
+        .info-senha {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #017193;
+            text-align: center;
+            text-decoration: underline;
+}
     </style>
 </head>
 <body>
@@ -55,8 +99,16 @@
         <div class ='quadrado'>
             <div class='logo'>
                 <img src="{{ url_for('static', filename='imagens/logoprov.jpeg') }}" alt="Logo">
+            </div>
+            <form method="POST" action="/login" class="form-login">
+                <input type="text" name="matricula" placeholder="Matrícula" required>
+                <input type="password" name="senha" placeholder="Senha" required>
+                <button type="submit">Acessar</button>
+                <p class="info-senha">
+                    *Senhas só podem ser alteradas via SUAP.
+                </p>
+            </form>
         </div> <!-- class = dando nome a classe criada -->
-
     </div>
     
 </body>
