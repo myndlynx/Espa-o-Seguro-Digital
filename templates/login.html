@@ -88,7 +88,7 @@
             font-size: 13px;
             color: #017193;
             text-align: center;
-            text-decoration: underline;
+            text-decoration: none;
         }
         .erro-msg {
             color: red;
@@ -100,7 +100,8 @@
     </style>
 </head>
 <body>
-    <div class="container">  <div class="quadrado">
+    <div class="container"> 
+         <div class="quadrado">
             <div class="logo">
                 <img src="{{ url_for('static', filename='imagens/logoprov.jpeg') }}" alt="Logo">
             </div>
@@ -128,12 +129,14 @@
                 >
                 
                 <button type="submit">Acessar</button>
-                
-                <p class="info-senha">
-                    *Senhas só podem ser alteradas via SUAP.
-                </p>
+            
+               <a href="https://suap.ifpb.edu.br/comum/solicitar_trocar_senha/" 
+                  class="info-senha">
+                  Esqueceu a senha?
+               </a>
             </form>
-        </div> </div>
+        </div>
+     </div>
     
 </body>
 </html>
