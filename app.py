@@ -12,7 +12,7 @@ app.permanent_session_lifetime = timedelta(hours=4)
 # 2. Banco de dados local (Lista Python)
 usuarios = [
     {"matricula": "202414610001", "senha": "12345a", "tipo": "aluno"},
-    {"matricula": "202514610002", "senha": "12345p", "tipo": "psicologo"}
+    {"matricula": "202414610002", "senha": "12345p", "tipo": "psicologo"}
 ]
 
 def autenticar(matricula, senha):
