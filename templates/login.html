@@ -12,7 +12,6 @@
             justify-content: center; /*centraliza horizontalmente*/
             align-items: center; /*centraliza verticalmente*/
             
-
             background-image: url("{{ url_for('static', filename='imagens/fundinho.jpeg.png') }}");
             background-size: cover;
             background-position: center;
@@ -62,7 +61,6 @@
             font-size: 16px;      /* aumenta texto */
             border-radius: 8px;
             border: 1px solid #ccc;
-
         }
         .form-login button {
             width: 100%;
@@ -91,25 +89,51 @@
             color: #017193;
             text-align: center;
             text-decoration: underline;
-}
+        }
+        .erro-msg {
+            color: red;
+            font-weight: bold;
+            font-size: 14px;
+            margin: 0;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="container">  <!-- div = bloco, área estilizável -->
-        <div class ='quadrado'>
-            <div class='logo'>
+    <div class="container">  <div class="quadrado">
+            <div class="logo">
                 <img src="{{ url_for('static', filename='imagens/logoprov.jpeg') }}" alt="Logo">
             </div>
+            
             <form method="POST" action="/login" class="form-login">
-                <input type="text" name="matricula" placeholder="Matrícula" required>
-                <input type="password" name="senha" placeholder="Senha" required>
+                
+                {% if erro %}
+                    <p class="erro-msg">{{ erro }}</p>
+                {% endif %}
+
+                <input 
+                    type="text" 
+                    name="matricula" 
+                    placeholder="Matrícula" 
+                    required 
+                    pattern="[0-9]+" 
+                    title="A matrícula deve conter apenas números"
+                >
+                
+                <input 
+                    type="password" 
+                    name="senha" 
+                    placeholder="Senha" 
+                    required
+                >
+                
                 <button type="submit">Acessar</button>
+                
                 <p class="info-senha">
                     *Senhas só podem ser alteradas via SUAP.
                 </p>
             </form>
-        </div> <!-- class = dando nome a classe criada -->
-    </div>
+        </div> </div>
     
 </body>
 </html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Aluno</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .btn-sair { background: #ff4c4c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>Bem-vindo à Área do Discente!</h2>
+    
+    <p>Matrícula conectada: <strong>{{ session['usuario'] }}</strong></p>
+
+    <br><br>
+    
+    <a href="/logout" class="btn-sair">Sair do Sistema</a>
+
+</body>
+</html>
