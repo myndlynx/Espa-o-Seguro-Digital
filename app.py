@@ -6,13 +6,13 @@ app = Flask(__name__)
 # Chave secreta necessária para assinar os cookies de sessão
 app.secret_key = 'chave_secreta_do_projeto'
 
-# 1. Configura o tempo de vida da sessão (inatividade) para 10 minutos
-app.permanent_session_lifetime = timedelta(minutes=10)
+# 1. Configura o tempo de vida da sessão (inatividade) para 4 horas
+app.permanent_session_lifetime = timedelta(hours=4)
 
 # 2. Banco de dados local (Lista Python)
 usuarios = [
-    {"matricula": "202414610092", "senha": "1234e0@#", "tipo": "aluno"},
-    {"matricula": "202514610090", "senha": "louco123cansado109", "tipo": "psicologo"}
+    {"matricula": "202414610001", "senha": "12345a", "tipo": "aluno"},
+    {"matricula": "202514610002", "senha": "12345p", "tipo": "psicologo"}
 ]
 
 def autenticar(matricula, senha):
