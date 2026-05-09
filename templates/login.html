@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Discente</title>
+    <title>Página de Login</title>
     <style>
         body {
             margin: 0;
@@ -31,7 +31,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start; /* mantém tudo no topo */
-            gap: 40px; /* controle do espaço entre logo e form */
+            gap: 12px; /* controle do espaço entre logo e form */
             padding-top: 30px;
         } 
         .logo {
@@ -97,15 +97,24 @@
             margin: 0;
             text-align: center;
         }
+        .logo-frase {
+            font-family: 'Times New Roman', Times, serif;
+            color: rgb(2, 149, 202);
+            font-size: 12px;
+            font-weight: bold;
+            margin: 0;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container"> 
          <div class="quadrado">
             <div class="logo">
-                <img src="{{ url_for('static', filename='imagens/logoprov.jpeg') }}" alt="Logo">
+                <img src="{{ url_for('static', filename='imagens/logo.jpeg') }}" alt="Logo">
             </div>
-            
+            <p class="logo-frase">Espaço Seguro Digital</p>
+
             <form method="POST" action="/login" class="form-login">
                 
                 {% if erro %}
