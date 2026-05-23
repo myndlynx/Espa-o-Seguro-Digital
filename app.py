@@ -4,12 +4,33 @@ from datetime import timedelta
 app = Flask(__name__)
 
 # Chave secreta necessária para assinar os cookies de sessão
-app.secret_key = 'chave_secreta_do_projeto'
+app.secret_key = 'chave_secreta_projeto_seguro'
 
-# 1. Configura o tempo de vida da sessão (inatividade) para 4 horas
+# Configura o tempo de vida da sessão (inatividade) para 4 horas
 app.permanent_session_lifetime = timedelta(hours=4)
 
-# 2. Banco de dados local (Lista Python)
+# --- LISTA PYTHON DOS 17 CAMPI DO IFPB ---
+lista_campi = [
+    {'nome': 'Areia'},
+    {'nome': 'Cabedelo'},
+    {'nome': 'Cajazeiras'},
+    {'nome': 'Campina Grande'},
+    {'nome': 'Catolé do Rocha'},
+    {'nome': 'Esperança'},
+    {'nome': 'Guarabira'},
+    {'nome': 'Itabaiana'},
+    {'nome': 'Itaporanga'},
+    {'nome': 'João Pessoa'},
+    {'nome': 'Mangabeira (João Pessoa)'},
+    {'nome': 'Monteiro'},
+    {'nome': 'Patos'},
+    {'nome': 'Pedras de Fogo'},
+    {'nome': 'Picuí'},
+    {'nome': 'Princesa Isabel'},
+    {'nome': 'Santa Rita'}
+]
+
+# --- BANCO DE DADOS LOCAL (Usuários) ---
 usuarios = [
     {"matricula": "202414610001", "senha": "12345a", "tipo": "aluno"},
     {"matricula": "202414610002", "senha": "12345p", "tipo": "psicologo"}
@@ -49,16 +70,41 @@ def login():
             session['usuario'] = usuario['matricula']
             session['tipo'] = usuario['tipo']
 
-            # Redireciona conforme o perfil (Trancamento de Rotas)
-            if session['tipo'] == 'psicologo':
-                return redirect(url_for('area_psicologo'))
-            elif session['tipo'] == 'aluno':
-                return redirect(url_for('area_aluno'))
+            # Redireciona para a tela de escolher o campus
+            return redirect(url_for('selecionar_campus'))
         
         # Caso o login falhe, define a mensagem que aparecerá no HTML
         erro = "Matrícula ou senha incorretos."
 
     return render_template('login.html', erro=erro)
+
+# --- ROTAS DE SELEÇÃO DE CAMPUS ---
+
+@app.route('/selecionar-campus')
+def selecionar_campus():
+    # Segurança: Se tentar acessar essa tela sem estar logado, volta pro login
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+        
+    # Renderiza a tela enviando a lista de campi para o HTML gerar os botões
+    return render_template('selecionar_campus.html', campi=lista_campi)
+
+@app.route('/salvar-campus', methods=['POST'])
+def salvar_campus():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+        
+    # Pega o valor do campus que o usuário selecionou na tela
+    escolha = request.form.get('campus_nome')
+    session['campus'] = escolha 
+    
+    # Direciona para o painel correto com base no perfil (Trancamento de Rotas)
+    if session['tipo'] == 'psicologo':
+        return redirect(url_for('area_psicologo'))
+    elif session['tipo'] == 'aluno':
+        return redirect(url_for('area_aluno'))
+        
+    return redirect(url_for('login'))
 
 # --- ROTAS PROTEGIDAS (SÓ ACESSA QUEM ESTÁ LOGADO E TEM O PERFIL CERTO) ---
 
@@ -78,7 +124,7 @@ def area_psicologo():
         
     return render_template('psicologo.html')
 
-# --- SISTEMA ---
+# --- SISTEMA E TRATAMENTO DE ERROS ---
 
 @app.route('/logout')
 def logout():
@@ -88,16 +134,17 @@ def logout():
 
 @app.route('/status')
 def status():
+    """Verifica se o servidor está rodando."""
     return "Servidor funcionando perfeitamente!"
-
-# --- TRATAMENTO DE ERROS ---
 
 @app.errorhandler(404)
 def pagina_nao_encontrada(error):
+    """Página personalizada para quando o usuário digita um endereço que não existe."""
     return "Página não encontrada no servidor", 404
 
 @app.errorhandler(500)
 def erro_servidor(error):
+    """Página personalizada para erros internos do código."""
     return "Erro interno no servidor", 500
 
 if __name__ == '__main__':
