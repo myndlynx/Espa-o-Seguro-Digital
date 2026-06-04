@@ -71,7 +71,6 @@ def area_aluno():
         return redirect(url_for('login'))
     return render_template('aluno.html')
 
-# --- SUB-ROTAS DO ALUNO (ADICIONADAS E PROTEGIDAS) ---
 
 @app.route('/agenda')
 def agenda():
@@ -96,8 +95,6 @@ def objetivo():
     if 'tipo' not in session or session['tipo'] != 'aluno':
         return redirect(url_for('login'))
     return render_template('objetivo.html')
-
-# --- ROTA DO PSICÓLOGO ---
 
 @app.route('/psicologo')
 def area_psicologo():
