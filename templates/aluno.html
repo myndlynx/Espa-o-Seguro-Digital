@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Aluno</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            ESDI
+        </div>
+        
+        <div class="sidebar-profile">
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #fff;">{{ session['usuario'] }}</span><br>
+                {{ session['campus'] }}
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('dicas') }}"><i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE</a></li>
+            <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-handshake-angle"></i> PROCURAR AJUDA</a></li>
+            <li><a href="{{ url_for('objetivo') }}"><i class="fa-solid fa-bullseye"></i> OBJETIVO DO SITE</a></li>            
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="conteudo-principal">
+        
+        <div class="secao-titulo">
+            <i class="fa-solid fa-user-doctor"></i> ATENDIMENTO PSICOLÓGICO
+        </div>
+
+        <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+
+            <a href="{{ url_for('agenda') }}" class="card-suap">
+                <i class="fa-regular fa-calendar-plus card-icon"></i>
+                <span class="card-title">Minha Agenda</span>
+            </a>
+
+            <a href="{{ url_for('consultas') }}" class="card-suap">
+                <i class="fa-solid fa-user-group card-icon"></i>
+                <span class="card-title">Agendar Consulta</span>
+            </a> 
+             
+            <a href="{{ url_for('ajuda') }}" class="card-suap" style="width:500px;">
+                <i class="fa-solid fa-phone card-icon"></i>
+                <span class="card-title">Procurar Ajuda</span>  <!--texto dentro de um link-->
+            </a>
+        </div>
+
+        <div class="secao-titulo" style="margin-top: 40px;">
+            <i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE
+        </div>
+
+        <div style="display: flex; gap: 30px; flex-wrap: wrap; ">
+
+            <a href="{{ url_for('dicas') }}" class="card-suap">
+                <i class="fa-solid fa-handshake-angle card-icon"></i>
+                <span class="card-title">Dicas</span>
+            </a>
+        </div>
+    </main>
+
+</body>
+</html>
