@@ -17,7 +17,7 @@ lista_campi = [
 
 usuarios = [
     {"matricula": "202414610001", "senha": "12345a", "tipo": "aluno"},
-    {"matricula": "202414610002", "senha": "12345p", "tipo": "psicologo", "campus": "João Pessoa"}
+    {"matricula": "202414610002", "senha": "12345p", "tipo": "psicologo", "campus": "Santa Rita"}
 ]
 
 def autenticar(matricula, senha):
@@ -77,6 +77,12 @@ def agenda():
     if 'tipo' not in session or session['tipo'] != 'aluno':
         return redirect(url_for('login'))
     return render_template('agenda.html')
+
+@app.route('/consultas')
+def consultas():
+    if 'tipo' not in session or session['tipo'] != 'aluno':
+        return redirect(url_for('login'))
+    return render_template('consulta.html')
 
 @app.route('/dicas')
 def dicas():
