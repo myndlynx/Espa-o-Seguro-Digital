@@ -4,165 +4,16 @@
     <meta charset="UTF-8">
     <title>Painel do Aluno</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<<<<<<< HEAD
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
-        }
-
-        .sidebar {
-            width: 260px;
-            background-color: #262626;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        }
-
-        .sidebar-logo {
-            font-size: 28px;
-            padding: 20px;
-            border-bottom: 1px solid #333;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .sidebar-profile {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background-color: #1a1a1a;
-            border-radius: 20px;
-            padding: 10px 15px;
-            margin: 20px 15px;
-        }
-
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            background-color: #555;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .profile-name {
-            font-size: 13px;
-            color: #999;
-            line-height: 1.4;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-menu li a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            color: #d1d1d1;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        .sidebar-menu li a:hover {
-            background-color: #333;
-            color: #fff;
-        }
-
-        .sidebar-menu li a i {
-            width: 20px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        .menu-sair {
-            color: #ff4c4c !important;
-            margin-top: auto;
-            border-top: 1px solid #333;
-        }
-
-        .conteudo-principal {
-            flex: 1;
-            background-color: #ffffff;
-            padding: 40px 50px;
-            overflow-y: auto;
-        }
-
-        .secao-titulo {
-            font-size: 14px;
-            color: #777;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-suap {
-            width: 240px;
-            height: 180px;
-            border: 1px solid #e0e0e0;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: 0.2s;
-        }
-        
-        .card-suap:hover {
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .card-icon {
-            font-size: 65px;
-            color: #8c97a1;
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            color: #007b70;
-            font-size: 16px;
-            text-align: center;
-        }
-    </style>
-=======
     <link rel="stylesheet" href="/static/css/styles.css">
->>>>>>> 5b4b7f47ba05fef8cf5fdfc2c3dcca5b6f43be17
 </head>
 <body>
 
     <aside class="sidebar">
-<<<<<<< HEAD
+
         <div class="sidebar-logo">
             ESDI
         </div>
-=======
-        <div class="sidebar-logo">ESDI</div>
->>>>>>> 5b4b7f47ba05fef8cf5fdfc2c3dcca5b6f43be17
+
         
         <div class="sidebar-profile">
             <div class="profile-pic">
@@ -175,7 +26,6 @@
         </div>
 
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('dicas') }}"><i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE</a></li>
             <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-handshake-angle"></i> PROCURAR AJUDA</a></li>
             <li><a href="{{ url_for('objetivo') }}"><i class="fa-solid fa-bullseye"></i> OBJETIVO DO SITE</a></li>            
             <li style="margin-top: auto;">
@@ -185,15 +35,12 @@
     </aside>
 
     <main class="conteudo-principal">
-<<<<<<< HEAD
-        
-=======
 
         <!-- IMAGEM NO TOPO -->
         <div style="width: 100%; margin-bottom: 40px;">
             <img 
-                src="/static/imagens/Imagem_tela.png" 
-                alt="ESDI - Espaço Seguro Digital"
+                src="/static/imagens/Imagem_tela.jpeg" 
+                alt="ESDI - Espaço Seguro Digital" 
                 style="
                     width: 100%;
                     max-height: 260px;
@@ -205,22 +52,18 @@
         </div>
 
         <!-- ATENDIMENTO PSICOLÓGICO -->
->>>>>>> 5b4b7f47ba05fef8cf5fdfc2c3dcca5b6f43be17
         <div class="secao-titulo">
             <i class="fa-solid fa-user-doctor"></i> ATENDIMENTO PSICOLÓGICO
         </div>
 
-<<<<<<< HEAD
         <div>
-=======
         <div style="display: flex; gap: 30px; flex-wrap: wrap;">
->>>>>>> 5b4b7f47ba05fef8cf5fdfc2c3dcca5b6f43be17
+
             <a href="{{ url_for('agenda') }}" class="card-suap">
                 <i class="fa-regular fa-calendar-plus card-icon"></i>
                 <span class="card-title">Minha Agenda</span>
             </a>
-<<<<<<< HEAD
-=======
+
 
             <a href="{{ url_for('consultas') }}" class="card-suap">
                 <i class="fa-solid fa-user-group card-icon"></i>
@@ -243,7 +86,7 @@
                 <i class="fa-solid fa-handshake-angle card-icon"></i>
                 <span class="card-title">Dicas</span>
             </a>
->>>>>>> 5b4b7f47ba05fef8cf5fdfc2c3dcca5b6f43be17
+
         </div>
 
     </main>
