@@ -17,7 +17,7 @@ lista_campi = [
 
 usuarios = [
     {"matricula": "202414610001", "senha": "12345a", "tipo": "aluno"},
-    {"matricula": "202414610002", "senha": "12345p", "tipo": "psicologo", "campus": "João Pessoa"}
+    {"matricula": "202414610002", "senha": "12345p", "tipo": "psicologo", "campus": "Santa Rita"}
 ]
 
 def autenticar(matricula, senha):
