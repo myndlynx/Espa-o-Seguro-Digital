@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Login</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center; /*centraliza horizontalmente*/
+            align-items: center; /*centraliza verticalmente*/
+            
+            background-image: url("{{ url_for('static', filename='imagens/fundinho.jpeg.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .container {
+            text-align: center;
+        }
+        
+        .quadrado{
+            width: 500px;
+            height: 400px;
+            background-color: rgb(165, 255, 252);
+            border-radius: 30px; /*bordas arredondadas*/
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* mantém tudo no topo */
+            gap: 12px; /* controle do espaço entre logo e form */
+            padding-top: 30px;
+        } 
+        .logo {
+            width: 400px;
+            height: 130px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            border-radius: 15px;
+        }
+        .form-login {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .form-login input {
+            width: 100%;          /* deixa ocupar toda largura do form */
+            padding: 14px;        /* aumenta altura da caixa */
+            font-size: 16px;      /* aumenta texto */
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .form-login button {
+            width: 100%;
+            padding: 14px;
+            font-size: 17px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            background: #00bbd8;
+            color: white;
+            cursor: pointer;
+
+        }
+        .form-login button:hover {
+            background: #006080;
+            transform: scale(1.02);
+            transition: 0.2s;
+        }
+        .form-login input,
+        .form-login button {
+            box-sizing: border-box;
+        }
+        .info-senha {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #017193;
+            text-align: center;
+            text-decoration: none;
+        }
+        .erro-msg {
+            color: red;
+            font-weight: bold;
+            font-size: 14px;
+            margin: 0;
+            text-align: center;
+        }
+        .logo-frase {
+            font-family: 'Times New Roman', Times, serif;
+            color: rgb(2, 149, 202);
+            font-size: 12px;
+            font-weight: bold;
+            margin: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"> 
+         <div class="quadrado">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='imagens/logo.jpeg') }}" alt="Logo">
+            </div>
+            <p class="logo-frase">ESPAÇO SEGURO DIGITAL</p>
+
+            <form method="POST" action="/login" class="form-login">
+                
+                {% if erro %}
+                    <p class="erro-msg">{{ erro }}</p>
+                {% endif %}
+
+                <input 
+                    type="text" 
+                    name="matricula" 
+                    placeholder="Matrícula" 
+                    required 
+                    pattern="[0-9]+" 
+                    title="A matrícula deve conter apenas números"
+                >
+                
+                <input 
+                    type="password" 
+                    name="senha" 
+                    placeholder="Senha" 
+                    required
+                >
+                
+                <button type="submit">Acessar</button>
+
+               <a href="https://suap.ifpb.edu.br/comum/solicitar_trocar_senha/" class="info-senha">
+                  Esqueceu a senha?
+               </a>
+            </form>
+        </div>
+     </div>
+    
+</body>
+</html>
