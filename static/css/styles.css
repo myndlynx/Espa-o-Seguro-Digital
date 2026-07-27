@@ -8,12 +8,12 @@ body {
     display: flex;
     height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f4f7f6;
 }
 
 .sidebar {
     width: 260px;
-    background-color: #708fbd; /* alterado */
+    background-color: #708fbd;
     color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -131,7 +131,7 @@ body {
 
 .card-icon {
     font-size: 65px;
-    color: #708fbd; 
+    color: #708fbd;
     margin-bottom: 15px;
 }
 
@@ -139,4 +139,154 @@ body {
     color: #708fbd;
     font-size: 16px;
     text-align: center;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+.card input, 
+.card select, 
+.card button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.card button {
+    background: #017193;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+
+.card button:hover {
+    background: #015a77;
+}
+
+.livre {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.ocupado {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.card-aluno {
+    background: white;
+    border-left: 5px solid #e06c4c;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-width: 600px;
+}
+
+.card-aluno h3 {
+    margin-top: 0; 
+    color: #333;
+    font-size: 18px;
+}
+
+.card-aluno p {
+    color: #555;
+    margin: 5px 0;
+}
+
+.card-consulta { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+    max-width: 500px; 
+    margin-bottom: 15px; 
+    border: 1px solid #e0e0e0; 
+}
+
+.nome-medico { 
+    color: #017193; 
+    font-size: 18px; 
+    font-weight: bold; 
+    margin-bottom: 10px; 
+}
+
+.detalhes { 
+    color: #666; 
+    font-size: 14px; 
+    margin-bottom: 15px; 
+}
+
+.status { 
+    color: #28a745; 
+    font-size: 14px; 
+    font-weight: bold; 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+}
+
+.bolinha { 
+    width: 10px; 
+    height: 10px; 
+    background: #28a745; 
+    border-radius: 50%; 
+    display: inline-block; 
+}
+
+.box { 
+    width: 100%; 
+    max-width: 500px; 
+}
+
+.btn-hora { 
+    background: #f0f0f0; 
+    border: 1px solid #ccc; 
+    padding: 15px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    color: #333; 
+    font-size: 16px; 
+    margin-bottom: 10px; 
+    text-align: left; 
+    display: block; 
+    width: 100%; 
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-hora:hover { 
+    background: #017193; 
+    color: white; 
+}
+
+.painel-psicologo {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.coluna-form {
+    flex: 1;
+    min-width: 300px;
+    max-width: 450px;
+}
+
+.coluna-lista {
+    flex: 2;
+    min-width: 300px;
 }

@@ -1,14 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico de Consultas</title>
+    <title>Consultas Agendadas</title>
 </head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
-    <h1>Ver Histórico de consultas</h1>
-    <p>Aqui ficam registradas todas as consultas anteriores.</p>
-    
-    <a href="{{ url_for('area_psicologo') }}"style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
+<body>
+    <h2>Alunos Agendados</h2>
+    <p>Abaixo estão as consultas marcadas pelos alunos na sua agenda:</p>
+
+    {% if consultas|length == 0 %}
+        <p style="color: #666;">Nenhuma consulta agendada até o momento.</p>
+    {% else %}
+        {% for c in consultas %}
+            <div class="card-aluno">
+                <h3 style="margin-top: 0; color: #333;">Paciente: {{ c.aluno_nome }} (Mat: {{ c.aluno_matricula }})</h3>
+                <p><strong>📅 Data:</strong> {{ c.data }}</p>
+                <p><strong>⏰ Horário:</strong> {{ c.horario }}</p>
+                <p><strong>💻 Modalidade:</strong> {{ c.modalidade }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('area_psicologo') }}">← Voltar ao Painel</a>
 </body>
 </html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Escolha o Horário</title>
+    <!-- Puxando o seu CSS centralizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="box">
+        <h2 style="margin-bottom: 5px;">Horários Disponíveis</h2>
+        <p style="color: #666; margin-top: 0;">Profissional: <strong>{{ psicologo_nome }}</strong><br>Modalidade: {{ modalidade }}</p>
+
+        {% if horarios|length == 0 %}
+            <p style="color: red;">Desculpe, este profissional não possui horários livres nesta modalidade no momento.</p>
+        {% else %}
+            <!-- Formulário para salvar direto o ID da consulta que está livre -->
+            <form action="{{ url_for('salvar_agendamento') }}" method="POST">
+                {% for h in horarios %}
+                    <button type="submit" name="id_consulta" value="{{ h.id }}" class="btn-hora">
+                        <strong>{{ h.data }}</strong> às <strong>{{ h.horario }}</strong>
+                    </button>
+                {% endfor %}
+            </form>
+        {% endif %}
+        
+        <br>
+        <a href="{{ url_for('agendar') }}" style="color: #666; text-decoration: none;">← Voltar e escolher outro profissional</a>
+    </div>
+</body>
+</html>
