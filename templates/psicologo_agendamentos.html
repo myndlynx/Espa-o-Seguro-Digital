@@ -6,19 +6,30 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <!-- Container centralizado que ocupa melhor a tela -->
-    <div style="padding: 40px; width: 100%; max-width: 1200px; margin: 0 auto;">
+    <div class="sidebar">
+        <div class="sidebar-logo">Seguro Digital</div>
+        <div class="sidebar-profile">
+            <div class="profile-pic">👤</div>
+            <div class="profile-name">Bem-vindo(a),<br><b>{{ session['nome'] }}</b></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('area_psicologo') }}">🏠 Início</a></li>
+            <li><a href="{{ url_for('psicologo_agendamentos') }}">📅 Gerenciar Horários</a></li>
+            <li><a href="{{ url_for('psicologo_historico') }}">📋 Histórico de Pacientes</a></li>
+            <li><a href="{{ url_for('logout') }}" class="menu-sair">🚪 Sair</a></li>
+        </ul>
+    </div>
+
+    <div class="conteudo-principal">
+        <h2 class="secao-titulo">GERENCIAR MINHA AGENDA</h2>
         
         <div class="painel-psicologo">
-            
-            <!-- COLUNA ESQUERDA: Formulário -->
             <div class="coluna-form">
-                <h2>Adicionar Horário</h2>
-                
-                <div class="card" style="max-width: 100%;">
+                <div class="card" style="max-width: 100%; margin-top: 0;">
                     <form method="POST" action="{{ url_for('psicologo_agendamentos') }}">
                         <label>Data:</label>
                         <input type="date" name="data" min="{{ hoje }}" max="{{ limite }}" required>
+                        
                         <label>Horário (ex: 14:00):</label>
                         <input type="time" name="horario" required>
                         
@@ -31,16 +42,11 @@
                         <button type="submit">Disponibilizar Horário</button>
                     </form>
                 </div>
-                <br>
-                <a href="{{ url_for('area_psicologo') }}" style="color: #666; text-decoration: none; font-weight: bold;">← Voltar ao Painel</a>
             </div>
 
-            <!-- COLUNA DIREITA: Lista de Horários Cadastrados -->
             <div class="coluna-lista">
-                <h2 style="margin-top: 0;">Meus Horários Cadastrados</h2>
-                
                 {% for c in minha_agenda %}
-                    <div class="card" style="max-width: 100%; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="card" style="max-width: 100%; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; margin-top: 0;">
                         <div>
                             <strong>{{ c.data }} às {{ c.horario }} ({{ c.modalidade }})</strong><br>
                             Status: <span class="{% if c.status == 'Livre' %}livre{% else %}ocupado{% endif %}">{{ c.status }}</span>
@@ -54,12 +60,11 @@
                         {% endif %}
                     </div>
                 {% else %}
-                    <div class="card" style="max-width: 100%; color: #666;">
+                    <div class="card" style="max-width: 100%; color: #666; margin-top: 0;">
                         <p>Nenhum horário cadastrado ainda. Utilize o formulário ao lado para adicionar disponibilidades.</p>
                     </div>
                 {% endfor %}
             </div>
-
         </div>
     </div>
 </body>

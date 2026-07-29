@@ -2,26 +2,40 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Consultas Agendadas</title>
+    <title>Histórico de Pacientes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h2>Alunos Agendados</h2>
-    <p>Abaixo estão as consultas marcadas pelos alunos na sua agenda:</p>
+    <div class="sidebar">
+        <div class="sidebar-logo">Seguro Digital</div>
+        <div class="sidebar-profile">
+            <div class="profile-pic">👤</div>
+            <div class="profile-name">Bem-vindo(a),<br><b>{{ session['nome'] }}</b></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('area_psicologo') }}">🏠 Início</a></li>
+            <li><a href="{{ url_for('psicologo_agendamentos') }}">📅 Gerenciar Horários</a></li>
+            <li><a href="{{ url_for('psicologo_historico') }}">📋 Histórico de Pacientes</a></li>
+            <li><a href="{{ url_for('logout') }}" class="menu-sair">🚪 Sair</a></li>
+        </ul>
+    </div>
 
-    {% if consultas|length == 0 %}
-        <p style="color: #666;">Nenhuma consulta agendada até o momento.</p>
-    {% else %}
-        {% for c in consultas %}
-            <div class="card-aluno">
-                <h3 style="margin-top: 0; color: #333;">Paciente: {{ c.aluno_nome }} (Mat: {{ c.aluno_matricula }})</h3>
-                <p><strong>📅 Data:</strong> {{ c.data }}</p>
-                <p><strong>⏰ Horário:</strong> {{ c.horario }}</p>
-                <p><strong>💻 Modalidade:</strong> {{ c.modalidade }}</p>
-            </div>
-        {% endfor %}
-    {% endif %}
+    <div class="conteudo-principal">
+        <h2 class="secao-titulo">PACIENTES AGENDADOS</h2>
+        <p style="color: #666; margin-bottom: 30px;">Abaixo estão as consultas marcadas pelos alunos na sua agenda:</p>
 
-    <br>
-    <a href="{{ url_for('area_psicologo') }}">← Voltar ao Painel</a>
+        {% if consultas|length == 0 %}
+            <p style="color: #666;">Nenhuma consulta agendada até o momento.</p>
+        {% else %}
+            {% for c in consultas %}
+                <div class="card-aluno">
+                    <h3>Paciente: {{ c.aluno_nome }} (Mat: {{ c.aluno_matricula }})</h3>
+                    <p><strong>📅 Data:</strong> {{ c.data }}</p>
+                    <p><strong>⏰ Horário:</strong> {{ c.horario }}</p>
+                    <p><strong>💻 Modalidade:</strong> {{ c.modalidade }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 </body>
 </html>
