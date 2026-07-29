@@ -3,25 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Histórico de Pacientes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-logo">Seguro Digital</div>
-        <div class="sidebar-profile">
-            <div class="profile-pic">👤</div>
-            <div class="profile-name">Bem-vindo(a),<br><b>{{ session['nome'] }}</b></div>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            ESDI
         </div>
-        <ul class="sidebar-menu">
-            <li><a href="{{ url_for('area_psicologo') }}">🏠 Início</a></li>
-            <li><a href="{{ url_for('psicologo_agendamentos') }}">📅 Gerenciar Horários</a></li>
-            <li><a href="{{ url_for('psicologo_historico') }}">📋 Histórico de Pacientes</a></li>
-            <li><a href="{{ url_for('logout') }}" class="menu-sair">🚪 Sair</a></li>
-        </ul>
-    </div>
+        
+        <div class="sidebar-profile">
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #c9d8f0; font-size: 12px;">Bem-vindo(a),</span><br>
+                <b style="color: #fff; font-size: 14px;">{{ session['nome'] }}</b><br>
+                <small style="color: #c9d8f0; margin-top: 3px; display: inline-block;">
+                    <i class="fa-solid fa-location-dot"></i> Campus {{ session['campus'] }}
+                </small>
+            </div>
+        </div>
 
-    <div class="conteudo-principal">
-        <h2 class="secao-titulo">PACIENTES AGENDADOS</h2>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('area_psicologo') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('psicologo_agendamentos') }}"><i class="fa-solid fa-calendar-days"></i> AGENDAMENTOS</a></li>
+            <li><a href="{{ url_for('psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE CONSULTAS</a></li>
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="conteudo-principal">
+        <h2 class="secao-titulo"><i class="fa-solid fa-clock-rotate-left"></i> CONSULTAS AGENDADAS</h2>
         <p style="color: #666; margin-bottom: 30px;">Abaixo estão as consultas marcadas pelos alunos na sua agenda:</p>
 
         {% if consultas|length == 0 %}
@@ -36,6 +51,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-    </div>
+    </main>
 </body>
 </html>
