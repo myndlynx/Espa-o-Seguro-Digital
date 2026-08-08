@@ -2,14 +2,77 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Agenda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            ESDI
+        </div>
 
-    <h1>Minha Agenda</h1>
-    <p>Aqui serão exibidos os seus agendamentos presenciais e online.</p>
+        <div class="sidebar-profile">
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #c9d8f0; font-size: 12px;">Bem-vindo(a),</span><br>
+                <b style="color: #fff; font-size: 14px;">{{ session['nome'] }}</b><br>
+                <small style="color: #c9d8f0; margin-top: 3px; display: inline-block;">
+                    <i class="fa-solid fa-location-dot"></i> Campus {{ session['campus'] }}
+                </small>
+            </div>
+        </div>
 
-    <a href="{{ url_for('area_aluno') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
+            <li><a href="{{ url_for('consultas') }}"><i class="fa-solid fa-user-group"></i> AGENDAR CONSULTA</a></li>
+            <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-handshake-angle"></i> PROCURAR AJUDA</a></li>
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
 
+    <main class="conteudo-principal">
+        <h2 class="secao-titulo"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</h2>
+        <p style="color: #666; margin-bottom: 30px;">Estas são as suas próximas consultas agendadas.</p>
+
+        {% if meus_agendamentos|length == 0 %}
+            <div class="card" style="max-width: 500px; color: #666;">
+                <p style="margin: 0;">Você ainda não tem nenhuma consulta agendada.</p>
+            </div>
+            <a href="{{ url_for('consultas') }}" class="card-suap" style="margin-top: 20px;">
+                <i class="fa-solid fa-user-group card-icon"></i>
+                <span class="card-title">Agendar Consulta</span>
+            </a>
+        {% else %}
+            {% for c in meus_agendamentos %}
+                <div class="card-consulta">
+                    <div class="nome-medico">{{ c.psicologo_nome }}</div>
+                    <div class="detalhes">
+                        <div><i class="fa-solid fa-calendar-day"></i> {{ c.data }} às {{ c.horario }}</div>
+                        <div>
+                            {% if c.modalidade == 'Online' %}
+                                <i class="fa-solid fa-video"></i> Consulta Online
+                            {% else %}
+                                <i class="fa-solid fa-location-dot"></i> Presencial &middot; Campus {{ c.campus }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="status"><span class="bolinha"></span> Confirmada</span>
+                        <form method="POST" action="{{ url_for('cancelar_consulta_aluno') }}" style="margin: 0; width: auto;">
+                            <input type="hidden" name="id_consulta" value="{{ c.id }}">
+                            <button type="submit" style="background: #dc3545; padding: 8px 15px; margin: 0; width: auto; font-size: 13px;" onclick="return confirm('Tem certeza que deseja cancelar esta consulta?');">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </main>
 </body>
 </html>

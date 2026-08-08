@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, session, render_template, url_for
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 
 app = Flask(__name__)
 app.secret_key = 'chave_secreta_projeto_seguro'
@@ -28,6 +28,13 @@ def autenticar(matricula, senha):
     for u in usuarios:
         if u["matricula"] == matricula and u["senha"] == senha: return u
     return None
+
+def chave_data_horario(c):
+    try:
+        return datetime.strptime(f"{c['data']} {c['horario']}", '%d/%m/%Y %H:%M')
+    except (ValueError, KeyError):
+        return datetime.max
+
 
 @app.route('/')
 def index(): return redirect(url_for('login'))
@@ -69,7 +76,23 @@ def area_aluno():
 def agenda():
     if session.get('tipo') != 'aluno': return redirect(url_for('login'))
     meus_agendamentos = [c for c in consultas_db if c.get('aluno_matricula') == session['usuario'] and c['status'] == 'Agendado']
+    meus_agendamentos.sort(key=chave_data_horario)
     return render_template('agenda.html', meus_agendamentos=meus_agendamentos)
+
+@app.route('/agenda/cancelar', methods=['POST'])
+def cancelar_consulta_aluno():
+    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
+
+    id_consulta = int(request.form.get('id_consulta'))
+
+    for c in consultas_db:
+        if c['id'] == id_consulta and c.get('aluno_matricula') == session['usuario']:
+            c['status'] = 'Livre'
+            c['aluno_matricula'] = None
+            c['aluno_nome'] = None
+            break
+
+    return redirect(url_for('agenda'))
 
 @app.route('/agendar', methods=['GET'])
 def agendar():
