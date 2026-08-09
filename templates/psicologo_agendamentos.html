@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disponibilizar Horários</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -27,8 +28,8 @@
 
         <ul class="sidebar-menu">
             <li><a href="{{ url_for('area_psicologo') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
-            <li><a href="{{ url_for('psicologo_agendamentos') }}"><i class="fa-solid fa-calendar-days"></i> AGENDAMENTOS</a></li>
-            <li><a href="{{ url_for('psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE CONSULTAS</a></li>
+            <li><a href="{{ url_for('psicologo_agendamentos') }}"><i class="fa-solid fa-calendar-days"></i> GERENCIAR HORÁRIOS</a></li>
+            <li><a href="{{ url_for('psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE PACIENTES</a></li>
             <li style="margin-top: auto;">
                 <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
             </li>
@@ -40,8 +41,28 @@
         
         <div class="painel-psicologo">
             <div class="coluna-form">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      {% if category == 'sucesso' %}
+                      <div style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 8px; border: 1px solid #c3e6cb; margin-bottom: 15px; font-size: 14px; font-weight: bold;">
+                          <i class="fa-solid fa-check-circle"></i> {{ message }}
+                      </div>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                {% if erro %}
+                <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; border: 1px solid #f5c6cb; margin-bottom: 15px; font-size: 14px; font-weight: bold;">
+                    <i class="fa-solid fa-circle-exclamation"></i> {{ erro }}
+                </div>
+                {% endif %}
+
                 <div class="card" style="max-width: 100%; margin-top: 0;">
-                    <form method="POST" action="{{ url_for('psicologo_agendamentos') }}">
+                    <form method="POST" action="{{ url_for('psicologo_agendamentos') }}" onsubmit="document.getElementById('btn-cadastrar').disabled=true; document.getElementById('btn-cadastrar').innerText='Cadastrando...';">
+                        
                         <label>Data:</label>
                         <input type="date" name="data" min="{{ hoje }}" max="{{ limite }}" required>
                         
@@ -54,7 +75,7 @@
                             <option value="Online">Online</option>
                         </select>
                         
-                        <button type="submit">Disponibilizar Horário</button>
+                        <button type="submit" id="btn-cadastrar">Disponibilizar Horário</button>
                     </form>
                 </div>
             </div>
@@ -68,7 +89,7 @@
                         </div>
                         
                         {% if c.status == 'Livre' %}
-                        <form method="POST" action="{{ url_for('cancelar_horario') }}" style="margin: 0; width: auto;">
+                        <form method="POST" action="{{ url_for('cancelar_horario') }}" style="margin: 0; width: auto;" onsubmit="if(confirm('Tem certeza que deseja cancelar este horário?')) { this.querySelector('button').disabled=true; this.querySelector('button').innerText='Aguarde...'; return true; } else { return false; }">
                             <input type="hidden" name="id_consulta" value="{{ c.id }}">
                             <button type="submit" style="background: #dc3545; padding: 8px 15px; margin: 0; width: auto; font-size: 13px;">Cancelar</button>
                         </form>

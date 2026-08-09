@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, session, render_template, url_for
+from flask import Flask, request, redirect, session, render_template, url_for, flash
 from datetime import timedelta, date, datetime
 
 app = Flask(__name__)
@@ -136,8 +136,11 @@ def psicologo_agendamentos():
     global id_consulta_atual
     if session.get('tipo') != 'psicologo': return redirect(url_for('login'))
     
+    erro = None
+    
     if request.method == 'POST':
         data_raw = request.form.get('data')
+        horario_form = request.form.get('horario')
         
         if '-' in data_raw:
             ano, mes, dia = data_raw.split('-')
@@ -145,28 +148,38 @@ def psicologo_agendamentos():
         else:
             data_formatada = data_raw
 
-        nova_disponibilidade = {
-            "id": id_consulta_atual,
-            "psicologo_matricula": session['usuario'],
-            "psicologo_nome": session['nome'],
-            "campus": session['campus'],
-            "data": data_formatada,
-            "horario": request.form.get('horario'),
-            "modalidade": request.form.get('modalidade'),
-            "status": "Livre",
-            "aluno_matricula": None,
-            "aluno_nome": None
-        }
-        consultas_db.append(nova_disponibilidade)
-        id_consulta_atual += 1
-        return redirect(url_for('psicologo_agendamentos'))
+        horario_duplicado = False
+        for c in consultas_db:
+            if c['psicologo_matricula'] == session['usuario'] and c['data'] == data_formatada and c['horario'] == horario_form:
+                horario_duplicado = True
+                break
+
+        if horario_duplicado:
+            erro = "Você já possui um horário cadastrado para esta data e hora!"
+        else:
+            nova_disponibilidade = {
+                "id": id_consulta_atual,
+                "psicologo_matricula": session['usuario'],
+                "psicologo_nome": session['nome'],
+                "campus": session['campus'],
+                "data": data_formatada,
+                "horario": horario_form,
+                "modalidade": request.form.get('modalidade'),
+                "status": "Livre",
+                "aluno_matricula": None,
+                "aluno_nome": None
+            }
+            consultas_db.append(nova_disponibilidade)
+            id_consulta_atual += 1
+            flash("Horário cadastrado com sucesso!", "sucesso")
+            return redirect(url_for('psicologo_agendamentos'))
         
     minha_agenda = [c for c in consultas_db if c['psicologo_matricula'] == session['usuario']]
     
     hoje = date.today().strftime('%Y-%m-%d')
     limite = (date.today() + timedelta(days=365)).strftime('%Y-%m-%d')
     
-    return render_template('psicologo_agendamentos.html', minha_agenda=minha_agenda, hoje=hoje, limite=limite)
+    return render_template('psicologo_agendamentos.html', minha_agenda=minha_agenda, hoje=hoje, limite=limite, erro=erro)
 
 @app.route('/psicologo/cancelar-horario', methods=['POST'])
 def cancelar_horario():
@@ -175,8 +188,8 @@ def cancelar_horario():
     id_consulta = int(request.form.get('id_consulta'))
     global consultas_db
     
-    # Filtra a lista, mantendo apenas as consultas que NÃO possuem o ID que acabamos de cancelar
     consultas_db = [c for c in consultas_db if c['id'] != id_consulta]
+    flash("Horário cancelado com sucesso!", "sucesso")
     
     return redirect(url_for('psicologo_agendamentos'))
 

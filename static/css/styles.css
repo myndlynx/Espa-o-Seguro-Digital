@@ -314,3 +314,56 @@ body {
     flex: 2;
     min-width: 300px;
 }
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .sidebar-profile {
+        margin: 10px;
+    }
+
+    .sidebar-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .sidebar-menu li {
+        flex: 1;
+        min-width: 45%;
+    }
+
+    .sidebar-menu li a {
+        justify-content: center;
+        padding: 12px 10px;
+        font-size: 12px;
+    }
+
+    .conteudo-principal {
+        padding: 20px 15px;
+    }
+
+    .painel-psicologo {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .coluna-form, 
+    .coluna-lista,
+    .card-suap,
+    .card,
+    .box,
+    .card-consulta,
+    .card-aluno {
+        max-width: 100%;
+        width: 100%;
+    }
+}
