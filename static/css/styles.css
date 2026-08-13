@@ -92,6 +92,10 @@ body {
     margin-top: auto;
     border-top: 1px solid #444;
 }
+.menu-sair:hover {
+    background-color: rgba(255, 76, 76, 0.15) !important;
+    color: #ff4c4c !important;
+}
 
 .conteudo-principal {
     flex: 1;
