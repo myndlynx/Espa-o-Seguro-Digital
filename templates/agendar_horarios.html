@@ -4,25 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escolher Horário</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-logo">Seguro Digital</div>
+    <aside class="sidebar">
+        <div class="sidebar-logo">ESDI</div>
+        
         <div class="sidebar-profile">
-            <div class="profile-pic">👤</div>
-            <div class="profile-name">Bem-vindo(a),<br><b>{{ session['nome'] }}</b></div>
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #c9d8f0; font-size: 12px;">Bem-vindo(a),</span><br>
+                <b style="color: #fff; font-size: 14px;">{{ session['nome'] }}</b><br>
+                <small style="color: #c9d8f0; margin-top: 3px; display: inline-block;">
+                    <i class="fa-solid fa-graduation-cap"></i> Campus {{ session['campus'] }}
+                </small>
+            </div>
         </div>
-        <ul class="sidebar-menu">
-            <li><a href="{{ url_for('area_aluno') }}">🏠 Início</a></li>
-            <li><a href="{{ url_for('agendar') }}">📅 Nova Consulta</a></li>
-            <li><a href="{{ url_for('agenda') }}">📋 Minhas Consultas</a></li>
-            <li><a href="{{ url_for('logout') }}" class="menu-sair">🚪 Sair</a></li>
-        </ul>
-    </div>
 
-    <div class="conteudo-principal">
-        <h2 class="secao-titulo">SELECIONE O HORÁRIO</h2>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('consultas') }}"><i class="fa-solid fa-calendar-plus"></i> NOVA CONSULTA</a></li>
+            <li><a href="{{ url_for('agenda') }}"><i class="fa-solid fa-list-check"></i> MINHAS CONSULTAS</a></li>
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="conteudo-principal">
+        <h2 class="secao-titulo"><i class="fa-regular fa-clock"></i> SELECIONE O HORÁRIO</h2>
         
         <div class="box" style="margin: 0;">
             <h3 class="horarios-titulo">Horários Disponíveis</h3>
@@ -34,7 +47,7 @@
             {% else %}
                 <form action="{{ url_for('salvar_agendamento') }}" method="POST">
                     {% for h in horarios %}
-                        <button type="submit" name="id_consulta" value="{{ h.id }}" class="btn-hora">
+                        <button type="submit" name="id_consulta" value="{{ h.id }}" class="btn-hora" onclick="return confirm('Tem certeza que deseja agendar sua consulta para o dia {{ h.data }} às {{ h.horario }}?');">
                             <strong>{{ h.data }}</strong> às <strong>{{ h.horario }}</strong>
                         </button>
                     {% endfor %}
@@ -42,8 +55,8 @@
             {% endif %}
             
             <br>
-            <a href="{{ url_for('agendar') }}" class="horarios-voltar">← Escolher outro profissional</a>
+            <a href="{{ url_for('consultas') }}" class="horarios-voltar">← Escolher outro profissional</a>
         </div>
-    </div>
+    </main>
 </body>
 </html>

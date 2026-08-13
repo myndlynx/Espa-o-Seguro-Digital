@@ -39,6 +39,23 @@
 
     <main class="conteudo-principal">
         <h2 class="secao-titulo"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category == 'sucesso' %}
+              <div style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 8px; border: 1px solid #c3e6cb; margin-bottom: 15px; font-size: 14px; font-weight: bold;">
+                  <i class="fa-solid fa-check-circle"></i> {{ message }}
+              </div>
+              {% elif category == 'erro' %}
+              <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; border: 1px solid #f5c6cb; margin-bottom: 15px; font-size: 14px; font-weight: bold;">
+                  <i class="fa-solid fa-circle-exclamation"></i> {{ message }}
+              </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
         <p style="color: #666; margin-bottom: 30px;">Estas são as suas próximas consultas agendadas.</p>
 
         {% if meus_agendamentos|length == 0 %}

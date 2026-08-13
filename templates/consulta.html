@@ -1,15 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Consulta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
-    <h1>Agendar Consulta</h1>
-    <p>Aqui você pode marcar consultas.</p>
-    
-    <a href="{{ url_for('area_aluno') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">ESDI</div>
+        
+        <div class="sidebar-profile">
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #c9d8f0; font-size: 12px;">Bem-vindo(a),</span><br>
+                <b style="color: #fff; font-size: 14px;">{{ session['nome'] }}</b><br>
+                <small style="color: #c9d8f0; margin-top: 3px; display: inline-block;">
+                    <i class="fa-solid fa-graduation-cap"></i> Campus {{ session['campus'] }}
+                </small>
+            </div>
+        </div>
 
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
+            <li><a href="{{ url_for('consultas') }}"><i class="fa-solid fa-user-group"></i> AGENDAR CONSULTA</a></li>
+            <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-handshake-angle"></i> PROCURAR AJUDA</a></li>
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="conteudo-principal">
+        <h2 class="secao-titulo"><i class="fa-solid fa-user-group"></i> AGENDAR NOVA CONSULTA</h2>
+        <p style="color: #666; margin-bottom: 30px;">Selecione a modalidade desejada para ver os profissionais disponíveis no seu campus.</p>
+        
+        <div class="card" style="max-width: 500px; margin-top: 0;">
+            <form action="{{ url_for('agendar_horarios') }}" method="POST">
+                
+                <label>1. Escolha a Modalidade:</label>
+                <!-- ID exigido pelo script de filtro -->
+                <select id="tipoConsulta" name="modalidade" required>
+                    <option value="" disabled selected>Selecione a modalidade...</option>
+                    <option value="Online">Online</option>
+                    <option value="Presencial">Presencial (No Campus)</option>
+                </select>
+
+                <label>2. Escolha o Profissional:</label>
+                <select name="psicologo" id="selectPsicologo" required>
+                    <option value="" disabled selected>Aguardando modalidade...</option>
+                    
+                    {% for p in psicologos %}
+                        <option class="psicologo" data-tipo="{{ p.tipo }}" value="{{ p.nome }}" style="display: none;" disabled>
+                            {{ p.nome }}
+                        </option>
+                    {% endfor %}
+                    
+                </select>
+
+                <button type="submit">Ver Horários Disponíveis</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const tipoConsulta = document.getElementById("tipoConsulta");
+        const psicologos = document.querySelectorAll(".psicologo");
+        const selectPsicologo = document.getElementById("selectPsicologo");
+
+        tipoConsulta.addEventListener("change", function () {
+            const tipoSelecionado = this.value;
+            
+            selectPsicologo.value = "";
+            selectPsicologo.options[0].selected = true;
+            selectPsicologo.options[0].text = "Selecione o profissional...";
+
+            psicologos.forEach(function (psicologo) {
+                const tipo = psicologo.dataset.tipo;
+
+                if (tipoSelecionado === "" || tipo === tipoSelecionado) {
+                    psicologo.style.display = "block";
+                    psicologo.disabled = false;
+                } else {
+                    psicologo.style.display = "none";
+                    psicologo.disabled = true;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
