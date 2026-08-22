@@ -37,36 +37,61 @@
 
     <main class="conteudo-principal">
         <h2 class="secao-titulo"><i class="fa-solid fa-user-group"></i> AGENDAR NOVA CONSULTA</h2>
-        
-        <!-- Mensagem de aviso para o professor/usuário de que a funcionalidade está na próxima fase -->
-        <p style="color: #666; margin-bottom: 30px;">
-            A funcionalidade de seleção de modalidade e profissional será implementada na próxima fase do projeto.
-        </p>
+        <p style="color: #666; margin-bottom: 30px;">Selecione a modalidade desejada para ver os profissionais disponíveis no seu campus.</p>
         
         <div class="card" style="max-width: 500px; margin-top: 0;">
-            <!-- O formulário está desativado temporariamente -->
-            <form action="#" method="POST" onsubmit="return false;">
+            <form action="{{ url_for('agendar_horarios') }}" method="POST">
                 
                 <label>1. Escolha a Modalidade:</label>
-                <!-- Select desativado e com cor cinza -->
-                <select id="tipoConsulta" name="modalidade" disabled style="background-color: #f0f0f0;">
-                    <option value="" disabled selected>Disponível na próxima etapa...</option>
+                <!-- ID exigido pelo script de filtro -->
+                <select id="tipoConsulta" name="modalidade" required>
+                    <option value="" disabled selected>Selecione a modalidade...</option>
+                    <option value="Online">Online</option>
+                    <option value="Presencial">Presencial (No Campus)</option>
                 </select>
 
                 <label>2. Escolha o Profissional:</label>
-                <!-- Select desativado e com cor cinza -->
-                <select name="psicologo" id="selectPsicologo" disabled style="background-color: #f0f0f0;">
-                    <option value="" disabled selected>Em breve...</option>
+                <select name="psicologo" id="selectPsicologo" required>
+                    <option value="" disabled selected>Aguardando modalidade...</option>
+                    
+                    {% for p in psicologos %}
+                        <option class="psicologo" data-tipo="{{ p.tipo }}" value="{{ p.nome }}" style="display: none;" disabled>
+                            {{ p.nome }}
+                        </option>
+                    {% endfor %}
+                    
                 </select>
 
-                <!-- Botão desativado e sem ação -->
-                <button type="button" disabled style="background-color: #ccc; cursor: not-allowed;">
-                    Ver Horários Disponíveis
-                </button>
+                <button type="submit">Ver Horários Disponíveis</button>
             </form>
         </div>
     </main>
 
-    <!-- O Script foi removido temporariamente para esta fase visual -->
+    <!-- SCRIPT DO FILTRO -->
+    <script>
+        const tipoConsulta = document.getElementById("tipoConsulta");
+        const psicologos = document.querySelectorAll(".psicologo");
+        const selectPsicologo = document.getElementById("selectPsicologo");
+
+        tipoConsulta.addEventListener("change", function () {
+            const tipoSelecionado = this.value;
+            
+            selectPsicologo.value = "";
+            selectPsicologo.options[0].selected = true;
+            selectPsicologo.options[0].text = "Selecione o profissional...";
+
+            psicologos.forEach(function (psicologo) {
+                const tipo = psicologo.dataset.tipo;
+
+                if (tipoSelecionado === "" || tipo === tipoSelecionado) {
+                    psicologo.style.display = "block";
+                    psicologo.disabled = false;
+                } else {
+                    psicologo.style.display = "none";
+                    psicologo.disabled = true;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
