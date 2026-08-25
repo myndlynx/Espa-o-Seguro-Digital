@@ -27,11 +27,11 @@
         </div>
 
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('area_psicologo') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
-            <li><a href="{{ url_for('psicologo_agendamentos') }}"><i class="fa-solid fa-calendar-days"></i> GERENCIAR HORÁRIOS</a></li>
-            <li><a href="{{ url_for('psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE PACIENTES</a></li>
+            <li><a href="{{ url_for('auth.area_psicologo') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_agendamentos') }}"><i class="fa-solid fa-calendar-days"></i> GERENCIAR HORÁRIOS</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE PACIENTES</a></li>
             <li style="margin-top: auto;">
-                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
             </li>
         </ul>
     </aside>
@@ -61,7 +61,7 @@
                 {% endif %}
 
                 <div class="card" style="max-width: 100%; margin-top: 0;">
-                    <form method="POST" action="{{ url_for('psicologo_agendamentos') }}" onsubmit="document.getElementById('btn-cadastrar').disabled=true; document.getElementById('btn-cadastrar').innerText='Cadastrando...';">
+                    <form method="POST" action="{{ url_for('psicologo.psicologo_agendamentos') }}" onsubmit="document.getElementById('btn-cadastrar').disabled=true; document.getElementById('btn-cadastrar').innerText='Cadastrando...';">
                         
                         <label>Data:</label>
                         <input type="date" name="data" min="{{ hoje }}" max="{{ limite }}" required>
@@ -89,7 +89,7 @@
                         </div>
                         
                         {% if c.status == 'Livre' %}
-                        <form method="POST" action="{{ url_for('cancelar_horario') }}" style="margin: 0; width: auto;" onsubmit="if(confirm('Tem certeza que deseja cancelar este horário?')) { this.querySelector('button').disabled=true; this.querySelector('button').innerText='Aguarde...'; return true; } else { return false; }">
+                        <form method="POST" action="{{ url_for('psicologo.cancelar_horario') }}" style="margin: 0; width: auto;" onsubmit="if(confirm('Tem certeza que deseja cancelar este horário?')) { this.querySelector('button').disabled=true; this.querySelector('button').innerText='Aguarde...'; return true; } else { return false; }">
                             <input type="hidden" name="id_consulta" value="{{ c.id }}">
                             <button type="submit" style="background: #dc3545; padding: 8px 15px; margin: 0; width: auto; font-size: 13px;">Cancelar</button>
                         </form>

@@ -1,246 +1,23 @@
 from flask import Flask, request, redirect, session, render_template, url_for, flash
 from datetime import timedelta, date, datetime
+from banco import usuarios, lista_campi
+from modulos.auth import auth_bp
+from modulos.aluno import aluno_bp
+from modulos.psicologo import psicologo_bp
 
 app = Flask(__name__)
 app.secret_key = 'chave_secreta_projeto_seguro'
+app.register_blueprint(auth_bp)
+app.register_blueprint(aluno_bp)
+app.register_blueprint(psicologo_bp)
 app.permanent_session_lifetime = timedelta(hours=4)
 
-lista_campi = [
-    {'nome': 'Areia'}, {'nome': 'Cabedelo'}, {'nome': 'Cajazeiras'},
-    {'nome': 'Campina Grande'}, {'nome': 'Catolé do Rocha'}, {'nome': 'Esperança'},
-    {'nome': 'Guarabira'}, {'nome': 'Itabaiana'}, {'nome': 'Itaporanga'},
-    {'nome': 'João Pessoa'}, {'nome': 'Mangabeira (João Pessoa)'}, {'nome': 'Monteiro'},
-    {'nome': 'Patos'}, {'nome': 'Pedras de Fogo'}, {'nome': 'Picuí'},
-    {'nome': 'Princesa Isabel'}, {'nome': 'Santa Rita'}
-]
 
-usuarios = [
-    {"matricula": "202414610001", "senha": "12345a", "nome": "João Aluno", "tipo": "aluno"},
-    {"matricula": "202414610003", "senha": "12345b", "nome": "Maria Aluna", "tipo": "aluno"},
-    {"matricula": "202414610002", "senha": "12345p", "nome": "Dra. Ana Costa", "tipo": "psicologo", "campus": "Santa Rita"},
-    {"matricula": "202414610004", "senha": "12345p", "nome": "Dr. Carlos Silva", "tipo": "psicologo", "campus": "João Pessoa"}
-]
-
-consultas_db = []
-id_consulta_atual = 1
-
-def autenticar(matricula, senha):
-    for u in usuarios:
-        if u["matricula"] == matricula and u["senha"] == senha: return u
-    return None
-
-def chave_data_horario(c):
-    try:
-        return datetime.strptime(f"{c['data']} {c['horario']}", '%d/%m/%Y %H:%M')
-    except (ValueError, KeyError):
-        return datetime.max
 
 
 @app.route('/')
-def index(): return redirect(url_for('login'))
+def index(): return redirect(url_for('auth.login'))
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    erro = None
-    if request.method == 'POST':
-        usuario = autenticar(request.form.get('matricula'), request.form.get('senha'))
-        if usuario:
-            session.permanent = True
-            session['usuario'] = usuario['matricula']
-            session['nome'] = usuario['nome']
-            session['tipo'] = usuario['tipo']
-            if session['tipo'] == 'psicologo':
-                session['campus'] = usuario['campus']
-                return redirect(url_for('area_psicologo'))
-            return redirect(url_for('selecionar_campus'))
-        erro = "Matrícula ou senha incorretos."
-    return render_template('login.html', erro=erro)
-
-@app.route('/selecionar-campus')
-def selecionar_campus():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    return render_template('selecionar_campus.html', campi=lista_campi)
-
-@app.route('/salvar-campus', methods=['POST'])
-def salvar_campus():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    session['campus'] = request.form.get('campus_nome')
-    return redirect(url_for('area_aluno'))
-
-@app.route('/aluno')
-def area_aluno():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    return render_template('aluno.html')
-
-@app.route('/agenda')
-def agenda():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    meus_agendamentos = [c for c in consultas_db if c.get('aluno_matricula') == session['usuario'] and c['status'] == 'Agendado']
-    meus_agendamentos.sort(key=chave_data_horario)
-    return render_template('agenda.html', meus_agendamentos=meus_agendamentos)
-
-@app.route('/agendar', methods=['GET'])
-def agendar():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    
-    campus_aluno = session.get('campus')
-    opcoes_psicologos = []
-
-    for c in consultas_db:
-        if c['status'] == 'Livre':
-            
-            if c['modalidade'] == 'Online':
-                opcao = {'nome': c['psicologo_nome'], 'tipo': 'Online'}
-                if opcao not in opcoes_psicologos:
-                    opcoes_psicologos.append(opcao)
-                    
-            elif c['modalidade'] == 'Presencial' and c['campus'] == campus_aluno:
-                opcao = {'nome': c['psicologo_nome'], 'tipo': 'Presencial'}
-                if opcao not in opcoes_psicologos:
-                    opcoes_psicologos.append(opcao)
-
-    return render_template('agendar.html', psicologos=opcoes_psicologos)
-
-@app.route('/agendar-horarios', methods=['POST'])
-def agendar_horarios():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    modalidade = request.form.get('modalidade')
-    psicologo_nome = request.form.get('psicologo')
-    horarios_livres = [c for c in consultas_db if c['psicologo_nome'] == psicologo_nome and c['modalidade'] == modalidade and c['status'] == 'Livre']
-    return render_template('agendar_horarios.html', psicologo_nome=psicologo_nome, modalidade=modalidade, horarios=horarios_livres)
-
-@app.route('/agenda/cancelar', methods=['POST'])
-def cancelar_consulta_aluno():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-
-    id_consulta = int(request.form.get('id_consulta'))
-
-    for c in consultas_db:
-        if c['id'] == id_consulta and c.get('aluno_matricula') == session['usuario']:
-            c['status'] = 'Livre'
-            c['aluno_matricula'] = None
-            c['aluno_nome'] = None
-            flash("Consulta cancelada com sucesso!", "sucesso")
-            break
-
-    return redirect(url_for('agenda'))
-
-@app.route('/salvar-agendamento', methods=['POST'])
-def salvar_agendamento():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    
-    id_consulta = int(request.form.get('id_consulta'))
-    
-    consulta_desejada = next((c for c in consultas_db if c['id'] == id_consulta), None)
-    
-    if not consulta_desejada:
-        flash("Erro: Horário não encontrado.", "erro")
-        return redirect(url_for('agenda'))
-
-    if consulta_desejada['status'] == 'Agendado':
-        flash("Erro: Este horário acabou de ser preenchido por outro aluno.", "erro")
-        return redirect(url_for('agenda'))
-        
-    ja_tem_consulta = False
-    for c in consultas_db:
-        if (c.get('aluno_matricula') == session['usuario'] and 
-            c['status'] == 'Agendado' and 
-            c['data'] == consulta_desejada['data'] and 
-            c['horario'] == consulta_desejada['horario']):
-            ja_tem_consulta = True
-            break
-            
-    if ja_tem_consulta:
-        flash("Erro: Você já possui uma consulta agendada para esta mesma data e horário!", "erro")
-        return redirect(url_for('agenda'))
-    
-    for c in consultas_db:
-        if c['id'] == id_consulta:
-            c['status'] = 'Agendado'
-            c['aluno_matricula'] = session['usuario']
-            c['aluno_nome'] = session['nome']
-            flash("Consulta agendada com sucesso!", "sucesso")
-            break
-            
-    return redirect(url_for('agenda'))
-
-@app.route('/psicologo')
-def area_psicologo():
-    if session.get('tipo') != 'psicologo': return redirect(url_for('login'))
-    return render_template('psicologo.html')
-
-@app.route('/psicologo/agendamentos', methods=['GET', 'POST'])
-def psicologo_agendamentos():
-    global id_consulta_atual
-    if session.get('tipo') != 'psicologo': return redirect(url_for('login'))
-    
-    erro = None
-    
-    if request.method == 'POST':
-        data_raw = request.form.get('data')
-        horario_form = request.form.get('horario')
-        
-        if '-' in data_raw:
-            ano, mes, dia = data_raw.split('-')
-            data_formatada = f"{dia}/{mes}/{ano}"
-        else:
-            data_formatada = data_raw
-
-        horario_duplicado = False
-        for c in consultas_db:
-            if c['psicologo_matricula'] == session['usuario'] and c['data'] == data_formatada and c['horario'] == horario_form:
-                horario_duplicado = True
-                break
-
-        if horario_duplicado:
-            erro = "Você já possui um horário cadastrado para esta data e hora!"
-        else:
-            nova_disponibilidade = {
-                "id": id_consulta_atual,
-                "psicologo_matricula": session['usuario'],
-                "psicologo_nome": session['nome'],
-                "campus": session['campus'],
-                "data": data_formatada,
-                "horario": horario_form,
-                "modalidade": request.form.get('modalidade'),
-                "status": "Livre",
-                "aluno_matricula": None,
-                "aluno_nome": None
-            }
-            consultas_db.append(nova_disponibilidade)
-            id_consulta_atual += 1
-            flash("Horário cadastrado com sucesso!", "sucesso")
-            return redirect(url_for('psicologo_agendamentos'))
-        
-    minha_agenda = [c for c in consultas_db if c['psicologo_matricula'] == session['usuario']]
-    
-    hoje = date.today().strftime('%Y-%m-%d')
-    limite = (date.today() + timedelta(days=365)).strftime('%Y-%m-%d')
-    
-    return render_template('psicologo_agendamentos.html', minha_agenda=minha_agenda, hoje=hoje, limite=limite, erro=erro)
-
-@app.route('/psicologo/cancelar-horario', methods=['POST'])
-def cancelar_horario():
-    if session.get('tipo') != 'psicologo': return redirect(url_for('login'))
-    
-    id_consulta = int(request.form.get('id_consulta'))
-    global consultas_db
-    
-    consultas_db = [c for c in consultas_db if c['id'] != id_consulta]
-    flash("Horário cancelado com sucesso!", "sucesso")
-    
-    return redirect(url_for('psicologo_agendamentos'))
-
-@app.route('/psicologo/historico')
-def psicologo_historico():
-    if session.get('tipo') != 'psicologo': return redirect(url_for('login'))
-    consultas_marcadas = [c for c in consultas_db if c['psicologo_matricula'] == session['usuario'] and c['status'] == 'Agendado']
-    return render_template('psicologo_historico.html', consultas=consultas_marcadas)
-
-@app.route('/psicologo/dicas')
-def psicologo_dicas():
-    if session.get('tipo') != 'psicologo': return redirect(url_for('login'))
-    return render_template('psicologo_dicas.html')
 
 @app.route('/dicas')
 def dicas(): return render_template('dicas.html')
@@ -250,31 +27,6 @@ def ajuda(): return render_template('ajuda.html')
 
 @app.route('/objetivo')
 def objetivo(): return render_template('objetivo.html')
-
-@app.route('/consultas', methods=['GET'])
-def consultas():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
-    
-    campus_aluno = session.get('campus')
-    opcoes_psicologos = []
-
-    for c in consultas_db:
-        if c['status'] == 'Livre':
-            if c['modalidade'] == 'Online':
-                opcao = {'nome': c['psicologo_nome'], 'tipo': 'Online'}
-                if opcao not in opcoes_psicologos:
-                    opcoes_psicologos.append(opcao)
-                    
-            elif c['modalidade'] == 'Presencial' and c['campus'] == campus_aluno:
-                opcao = {'nome': c['psicologo_nome'], 'tipo': 'Presencial'}
-                if opcao not in opcoes_psicologos:
-                    opcoes_psicologos.append(opcao)
-
-    return render_template('consulta.html', psicologos=opcoes_psicologos)
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)

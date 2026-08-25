@@ -25,12 +25,12 @@
         </div>
 
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
-            <li><a href="{{ url_for('agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
-            <li><a href="{{ url_for('consultas') }}"><i class="fa-solid fa-user-group"></i> AGENDAR CONSULTA</a></li>
+            <li><a href="{{ url_for('auth.area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('auth.agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
+            <li><a href="{{ url_for('aluno.consultas') }}"><i class="fa-solid fa-user-group"></i> AGENDAR CONSULTA</a></li>
             <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-handshake-angle"></i> PROCURAR AJUDA</a></li>
             <li style="margin-top: auto;">
-                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
             </li>
         </ul>
     </aside>
@@ -40,7 +40,7 @@
         <p style="color: #666; margin-bottom: 30px;">Selecione a modalidade desejada para ver os profissionais disponíveis no seu campus.</p>
         
         <div class="card" style="max-width: 500px; margin-top: 0;">
-            <form action="{{ url_for('agendar_horarios') }}" method="POST">
+            <form action="{{ url_for('aluno.agendar_horarios') }}" method="POST">
                 
                 <label>1. Escolha a Modalidade:</label>
                 <!-- ID exigido pelo script de filtro -->

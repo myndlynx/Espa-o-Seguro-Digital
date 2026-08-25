@@ -28,11 +28,11 @@
         </div>
 
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('psicologo_agendamentos') }}"><i class="fa-solid fa-handshake-angle"></i> AGENDAMENTOS</a></li>
-            <li><a href="{{ url_for('psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE CONSULTAS</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_agendamentos') }}"><i class="fa-solid fa-handshake-angle"></i> AGENDAMENTOS</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE CONSULTAS</a></li>
             <li><a href="{{ url_for('objetivo') }}"><i class="fa-solid fa-bullseye"></i> OBJETIVO DO SITE</a></li>            
             <li style="margin-top: auto;">
-                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
             </li>
         </ul>
     </aside>
@@ -59,12 +59,12 @@
 
         <div style="display: flex; gap: 30px; flex-wrap: wrap;">
 
-            <a href="{{ url_for('psicologo_agendamentos') }}" class="card-suap">
+            <a href="{{ url_for('psicologo.psicologo_agendamentos') }}" class="card-suap">
                 <i class="fa-solid fa-clipboard-list card-icon"></i>
                 <span class="card-title">Agendamentos</span>
             </a>
 
-            <a href="{{ url_for('psicologo_historico') }}" class="card-suap">
+            <a href="{{ url_for('psicologo.psicologo_historico') }}" class="card-suap">
                 <i class="fa-solid fa-clock-rotate-left card-icon"></i>
                 <span class="card-title">Histórico de Consultas</span>
             </a>
@@ -80,7 +80,7 @@
         </div>
 
         <div style="display: flex; gap: 30px; flex-wrap: wrap;">
-            <a href="{{ url_for('psicologo_dicas') }}" class="card-suap">
+            <a href="{{ url_for('psicologo.psicologo_dicas') }}" class="card-suap">
                 <i class="fa-solid fa-pen-to-square card-icon"></i>
                 <span class="card-title">Publicar Dica</span>
             </a>

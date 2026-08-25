@@ -33,7 +33,7 @@
             <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-handshake-angle"></i> PROCURAR AJUDA</a></li>
             <li><a href="{{ url_for('objetivo') }}"><i class="fa-solid fa-bullseye"></i> OBJETIVO DO SITE</a></li>            
             <li style="margin-top: auto;">
-                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
             </li>
         </ul>
     </aside>
@@ -60,13 +60,13 @@
 
         <div style="display: flex; gap: 30px; flex-wrap: wrap;">
 
-            <a href="{{ url_for('agenda') }}" class="card-suap">
+            <a href="{{ url_for('auth.agenda') }}" class="card-suap">
                 <i class="fa-regular fa-calendar-plus card-icon"></i>
                 <span class="card-title">Minha Agenda</span>
             </a>
 
 
-            <a href="{{ url_for('consultas') }}" class="card-suap">
+            <a href="{{ url_for('aluno.consultas') }}" class="card-suap">
                 <i class="fa-solid fa-user-group card-icon"></i>
                 <span class="card-title">Agendar Consulta</span>
             </a>

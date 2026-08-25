@@ -25,11 +25,11 @@
         </div>
 
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
-            <li><a href="{{ url_for('consultas') }}"><i class="fa-solid fa-calendar-plus"></i> NOVA CONSULTA</a></li>
-            <li><a href="{{ url_for('agenda') }}"><i class="fa-solid fa-list-check"></i> MINHAS CONSULTAS</a></li>
+            <li><a href="{{ url_for('auth.area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('aluno.consultas') }}"><i class="fa-solid fa-calendar-plus"></i> NOVA CONSULTA</a></li>
+            <li><a href="{{ url_for('auth.agenda') }}"><i class="fa-solid fa-list-check"></i> MINHAS CONSULTAS</a></li>
             <li style="margin-top: auto;">
-                <a href="{{ url_for('logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
             </li>
         </ul>
     </aside>
@@ -45,7 +45,7 @@
             {% if horarios|length == 0 %}
                 <p style="color: #dc3545; font-weight: bold;">Desculpe, este profissional não possui horários livres nesta modalidade no momento.</p>
             {% else %}
-                <form action="{{ url_for('salvar_agendamento') }}" method="POST">
+                <form action="{{ url_for('aluno.salvar_agendamento') }}" method="POST">
                     {% for h in horarios %}
                         <button type="submit" name="id_consulta" value="{{ h.id }}" class="btn-hora" onclick="return confirm('Tem certeza que deseja agendar sua consulta para o dia {{ h.data }} às {{ h.horario }}?');">
                             <strong>{{ h.data }}</strong> às <strong>{{ h.horario }}</strong>
@@ -55,7 +55,7 @@
             {% endif %}
             
             <br>
-            <a href="{{ url_for('consultas') }}" class="horarios-voltar">← Escolher outro profissional</a>
+            <a href="{{ url_for('aluno.consultas') }}" class="horarios-voltar">← Escolher outro profissional</a>
         </div>
     </main>
 </body>

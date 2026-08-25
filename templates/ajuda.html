@@ -11,9 +11,9 @@
     <p>Informações de contato e como solicitar apoio psicológico emergencial.</p>
 
     {% if session['tipo'] == 'psicologo' %}
-    <a href="{{ url_for('area_psicologo') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
+    <a href="{{ url_for('auth.area_psicologo') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
     {% else %}
-    <a href="{{ url_for('area_aluno') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
+    <a href="{{ url_for('auth.area_aluno') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
     {% endif %}
 
 </body>
