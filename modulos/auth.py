@@ -34,7 +34,7 @@ def login():
  
 @auth_bp.route('/agenda')      # precisou vir para cá, mas é a agenda do ALUNO
 def agenda():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
+    if session.get('tipo') != 'aluno': return redirect(url_for('auth.login'))
     meus_agendamentos = [c for c in consultas_db if c.get('aluno_matricula') == session['usuario'] and c['status'] == 'Agendado']
     meus_agendamentos.sort(key=chave_data_horario)
     return render_template('agenda.html', meus_agendamentos=meus_agendamentos)

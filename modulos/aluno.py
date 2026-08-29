@@ -41,7 +41,7 @@ def agendar():
 
 @aluno_bp.route('/agendar-horarios', methods=['POST'])
 def agendar_horarios():
-    if session.get('tipo') != 'aluno': return redirect(url_for('login'))
+    if session.get('tipo') != 'aluno': return redirect(url_for('auth.login'))
     modalidade = request.form.get('modalidade')
     psicologo_nome = request.form.get('psicologo')
     horarios_livres = [c for c in consultas_db if c['psicologo_nome'] == psicologo_nome and c['modalidade'] == modalidade and c['status'] == 'Livre']
