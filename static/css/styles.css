@@ -115,7 +115,7 @@ body {
 }
 
 .card-suap {
-    width: 300px;
+    width: 366px;
     height: 180px;
     border: 1px solid #e0e0e0;
     border-radius: 20px;
@@ -407,3 +407,6 @@ body {
         margin-right: 0;
     }
 }
+
+.status.cancelada { color: #dc3545; }
+.bolinha.cancelada { background: #dc3545; }

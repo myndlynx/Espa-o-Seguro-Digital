@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Consultas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">ESDI</div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('auth.area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('auth.agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
+            <li><a href="{{ url_for('aluno.historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO</a></li>
+            <li><a href="{{ url_for('auth.logout') }}" class="menu-sair">SAIR</a></li>
+        </ul>
+    </aside>
+
+    <main class="conteudo-principal">
+        <h2 class="secao-titulo">HISTÓRICO DE CONSULTAS</h2>
+
+        {% if historico|length == 0 %}
+            <p>Você ainda não possui consultas canceladas.</p>
+        {% else %}
+            {% for c in historico %}
+                <div class="card-consulta">
+                    <div class="nome-medico">{{ c.psicologo_nome }}</div>
+                    <div class="detalhes">
+                        <div>{{ c.data }} às {{ c.horario }} — {{ c.modalidade }}</div>
+                    </div>
+                    <span class="status cancelada"><span class="bolinha cancelada"></span> Cancelada</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </main>
+</body>
+</html>

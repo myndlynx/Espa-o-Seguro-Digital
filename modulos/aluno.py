@@ -1,8 +1,15 @@
 from flask import Blueprint, session, render_template, redirect, url_for, request, flash
 from banco import lista_campi, consultas_db
+from datetime import datetime
 
 
 aluno_bp = Blueprint('aluno', __file__)
+
+def _proximo_id():
+    lista_de_ids = []
+    for c in consultas_db:
+        lista_de_ids.append(c['id'])
+    return max(lista_de_ids) + 1
 
 
 @aluno_bp.route('/selecionar-campus')
@@ -55,9 +62,22 @@ def cancelar_consulta_aluno():
 
     for c in consultas_db:
         if c['id'] == id_consulta and c.get('aluno_matricula') == session['usuario']:
-            c['status'] = 'Livre'
-            c['aluno_matricula'] = None
-            c['aluno_nome'] = None
+            consultas_db.append({
+                'id': _proximo_id(),
+                'psicologo_matricula': c['psicologo_matricula'],
+                'psicologo_nome': c['psicologo_nome'],
+                'campus': c['campus'],
+                'data': c['data'],
+                'horario': c['horario'],
+                'modalidade': c['modalidade'],
+                'status': 'Livre',
+                'aluno_matricula': None,
+                'aluno_nome': None
+            })
+
+            c['status'] = 'Cancelada'
+            c['cancelado_em'] = datetime.now().strftime('%d/%m/%Y %H:%M')
+
             flash("Consulta cancelada com sucesso!", "sucesso")
             break
 
@@ -123,4 +143,14 @@ def consultas():
 
     return render_template('consulta.html', psicologos=opcoes_psicologos)
 
+@aluno_bp.route('/consultas/historico', methods=['GET'])
+def historico():
+    if session.get('tipo') != 'aluno': return redirect(url_for('auth.login'))
+
+    meu_historico = []
+    for c in consultas_db:
+        if c.get('aluno_matricula') == session['usuario'] and c['status'] == 'Cancelada':
+            meu_historico.append(c)
+
+    return render_template('historico.html', historico=meu_historico)
 
