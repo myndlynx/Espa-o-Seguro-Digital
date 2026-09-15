@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Login</title>
+    <title>Página de Login - Espaço Seguro Digital</title>
     <style>
+        :root {
+            --cor-primaria: #017193;
+            --cor-primaria-escura: #015a77;
+            --cor-secundaria: #708fbd;
+            --cor-secundaria-escura: #4772b3;
+            --cor-fundo: #f4f7f6;
+            --cor-sucesso: #28a745;
+            --cor-erro: #dc3545;
+            --cor-texto: #333333;
+            --cor-texto-claro: #666666;
+        }
+
         * {
             box-sizing: border-box;
         }
@@ -13,152 +25,299 @@
             margin: 0;
             min-height: 100vh;
             display: flex;
-            justify-content: center; 
-            align-items: center; 
-            padding: 20px; 
-            
-            background-image: url("{{ url_for('static', filename='imagens/fundinho.jpeg.png') }}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-        
-        .container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .quadrado {
-            width: 100%; 
-            max-width: 500px; 
-            height: auto; 
-            min-height: 400px;
-            background-color: rgb(165, 255, 252);
-            border-radius: 30px; 
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; 
-            gap: 12px; 
-            padding: 30px 20px; 
-        } 
-        
-        .logo {
-            width: 100%;
-            max-width: 400px;
-            height: auto;
-            display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cor-fundo);
         }
 
-        .logo img {
+        .login-card {
             width: 100%;
-            max-height: 130px; 
-            object-fit: contain; 
-            border-radius: 15px;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(1, 113, 147, 0.18);
+            position: relative;
         }
-        
-        .form-login {
-            width: 100%;
-            max-width: 400px;
+
+        /* ===== Cabeçalho colorido ===== */
+        .login-header {
+            position: relative;
+            padding: 40px 30px 70px 30px;
+            background: linear-gradient(150deg, var(--cor-secundaria) 0%, var(--cor-primaria) 100%);
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .blob-1 {
+            width: 160px;
+            height: 160px;
+            top: -60px;
+            left: -60px;
+        }
+
+        .blob-2 {
+            width: 90px;
+            height: 90px;
+            top: 20px;
+            left: 90px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .login-logo {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            justify-content: center;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
         }
-        
-        .form-login input {
-            width: 100%;          
-            padding: 14px;        
-            font-size: 16px;      
-            border-radius: 8px;
-            border: 1px solid #ccc;
+
+        .login-logo img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            background: #ffffff;
+            border-radius: 50%;
+            padding: 8px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
         }
-        
-        .form-login button {
-            width: 100%;
-            padding: 14px;
-            font-size: 17px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            background: #00bbd8;
-            color: white;
-            cursor: pointer;
+
+        .login-header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
         }
-        
-        .form-login button:hover {
-            background: #006080;
-            transform: scale(1.02);
-            transition: 0.2s;
-        }
-        
-        .info-senha {
-            margin-top: 8px;
+
+        .login-header p {
+            margin: 6px 0 0 0;
             font-size: 13px;
-            color: #017193;
-            text-align: center;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+        }
+
+        .planta {
+            position: absolute;
+            right: 18px;
+            bottom: -18px;
+            width: 90px;
+            z-index: 1;
+            opacity: 0.95;
+        }
+
+        /* ===== Corpo do formulário ===== */
+        .login-body {
+            position: relative;
+            background: #ffffff;
+            border-radius: 28px 28px 0 0;
+            margin-top: -40px;
+            padding: 32px 28px 28px 28px;
+            z-index: 3;
+        }
+
+        .login-body h2 {
+            margin: 0 0 20px 0;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--cor-primaria-escura);
+        }
+
+        .form-login {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .campo {
+            position: relative;
+        }
+
+        .campo svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: var(--cor-secundaria);
+            pointer-events: none;
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            font-size: 15px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            background: var(--cor-fundo);
+            color: var(--cor-texto);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .campo input:focus {
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 3px rgba(1, 113, 147, 0.15);
+            background: #ffffff;
+        }
+
+        .campo.senha input {
+            padding-right: 42px;
+        }
+
+        .botao-olho {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            color: var(--cor-texto-claro);
+        }
+
+        .botao-olho svg {
+            position: static;
+            width: 18px;
+            height: 18px;
+            stroke: var(--cor-texto-claro);
+        }
+
+        .info-senha {
+            align-self: flex-end;
+            font-size: 13px;
+            color: var(--cor-primaria);
             text-decoration: none;
+            font-weight: 600;
+            margin-top: -4px;
         }
-        
+
+        .info-senha:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            background: var(--cor-primaria);
+            color: #ffffff;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            margin-top: 6px;
+        }
+
+        .btn-login:hover {
+            background: var(--cor-primaria-escura);
+            transform: translateY(-1px);
+        }
+
         .erro-msg {
-            color: red;
-            font-weight: bold;
-            font-size: 14px;
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--cor-erro);
+            font-weight: 600;
+            font-size: 13px;
             margin: 0;
+            padding: 10px 12px;
+            border-radius: 10px;
             text-align: center;
         }
-        
-        .logo-frase {
-            font-family: 'Times New Roman', Times, serif;
-            color: rgb(2, 149, 202);
-            font-size: 12px;
-            font-weight: bold;
-            margin: 0;
+
+        .rodape-login {
+            margin-top: 18px;
             text-align: center;
+            font-size: 12px;
+            color: var(--cor-texto-claro);
+        }
+
+        /* ===== Layout para computador / notebook ===== */
+        @media (min-width: 860px) {
+            .login-card {
+                max-width: 900px;
+                min-height: 560px;
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+            }
+
+            .login-header {
+                width: 45%;
+                padding: 60px 40px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                border-radius: 0;
+            }
+
+            .login-logo {
+                justify-content: flex-start;
+                margin-bottom: 24px;
+            }
+
+            .login-header h1 {
+                font-size: 40px;
+            }
+
+            .login-header p {
+                font-size: 15px;
+                max-width: 260px;
+            }
+
+            .planta {
+                width: 130px;
+                right: 30px;
+                bottom: 30px;
+            }
+
+            .login-body {
+                width: 55%;
+                margin-top: 0;
+                border-radius: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 60px 60px;
+            }
+
+            .login-body h2 {
+                font-size: 30px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container"> 
-         <div class="quadrado">
-            <div class="logo">
-                <img src="{{ url_for('static', filename='imagens/logo.jpeg') }}" alt="Logo">
+    <div class="login-card">
+
+        <div class="login-header">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+
+            <div class="login-logo">
+                <img src="{{ url_for('static', filename='imagens/logo.jpeg') }}" alt="Logo ESDI">
             </div>
-            <p class="logo-frase">ESPAÇO SEGURO DIGITAL</p>
 
-            <form method="POST" action="/login" class="form-login">
-                
-                {% if erro %}
-                    <p class="erro-msg">{{ erro }}</p>
-                {% endif %}
+            <h1>Olá!</h1>
+            <p>SEJA BEM-VINDO(A) AO ESPAÇO SEGURO DIGITAL</p>
 
-                <input 
-                    type="text" 
-                    name="matricula" 
-                    placeholder="Matrícula" 
-                    required 
-                    pattern="[0-9]+" 
-                    title="A matrícula deve conter apenas números"
-                >
-                
-                <input 
-                    type="password" 
-                    name="senha" 
-                    placeholder="Senha" 
-                    required
-                >
-                
-                <button type="submit">Acessar</button>
-
-               <a href="https://suap.ifpb.edu.br/comum/solicitar_trocar_senha/" class="info-senha">
-                  Esqueceu a senha?
-               </a>
-            </form>
-        </div>
-     </div>
-</body>
-</html>
+            <svg class="planta" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="112" rx="26" ry="5" fill="rgba(0,0,0,0.08)"/>
+                <path d="M28 82 L72 82 L66 112 L34 112 Z" fill="#ffffff"/>
+                <path d="M50 82 C 30 60, 30 30, 46 8 C 40 40, 46 65, 50 82 Z" fill="#28a745" opacity="0.85"/>
+                <path d="M50 82 C 70 55, 66 25, 50 4 C 60 35, 56 65, 50 82 Z" fill="#28a745"/>
