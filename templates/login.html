@@ -21,31 +21,30 @@
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--cor-fundo);
+            padding: 0;
+            height: 100%;
         }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* ===== Card ocupa a tela inteira ===== */
         .login-card {
             width: 100%;
-            max-width: 420px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             background: #ffffff;
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(1, 113, 147, 0.18);
-            position: relative;
         }
 
         /* ===== Cabeçalho colorido ===== */
         .login-header {
             position: relative;
-            padding: 40px 30px 70px 30px;
+            flex: 0 0 auto;
+            padding: 40px 30px 60px 30px;
             background: linear-gradient(150deg, var(--cor-secundaria) 0%, var(--cor-primaria) 100%);
             color: #ffffff;
             overflow: hidden;
@@ -120,11 +119,15 @@
         /* ===== Corpo do formulário ===== */
         .login-body {
             position: relative;
+            flex: 1 1 auto;
             background: #ffffff;
             border-radius: 28px 28px 0 0;
-            margin-top: -40px;
-            padding: 32px 28px 28px 28px;
+            margin-top: -30px;
+            padding: 32px 28px 40px 28px;
             z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .login-body h2 {
@@ -152,6 +155,7 @@
             width: 18px;
             height: 18px;
             stroke: var(--cor-secundaria);
+            fill: none;
             pointer-events: none;
         }
 
@@ -187,7 +191,6 @@
             cursor: pointer;
             padding: 4px;
             display: flex;
-            color: var(--cor-texto-claro);
         }
 
         .botao-olho svg {
@@ -195,6 +198,7 @@
             width: 18px;
             height: 18px;
             stroke: var(--cor-texto-claro);
+            fill: none;
         }
 
         .info-senha {
@@ -250,20 +254,15 @@
         /* ===== Layout para computador / notebook ===== */
         @media (min-width: 860px) {
             .login-card {
-                max-width: 900px;
-                min-height: 560px;
-                display: flex;
                 flex-direction: row;
-                align-items: stretch;
             }
 
             .login-header {
-                width: 45%;
-                padding: 60px 40px;
+                flex: 0 0 45%;
+                padding: 60px 50px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                border-radius: 0;
             }
 
             .login-logo {
@@ -272,32 +271,33 @@
             }
 
             .login-header h1 {
-                font-size: 40px;
+                font-size: 42px;
             }
 
             .login-header p {
                 font-size: 15px;
-                max-width: 260px;
+                max-width: 280px;
             }
 
             .planta {
-                width: 130px;
-                right: 30px;
-                bottom: 30px;
+                width: 140px;
+                right: 40px;
+                bottom: 40px;
             }
 
             .login-body {
-                width: 55%;
+                flex: 1 1 55%;
                 margin-top: 0;
                 border-radius: 0;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding: 60px 60px;
+                padding: 60px 80px;
             }
 
             .login-body h2 {
-                font-size: 30px;
+                font-size: 32px;
+            }
+
+            .form-login {
+                max-width: 380px;
             }
         }
     </style>
@@ -321,3 +321,73 @@
                 <path d="M28 82 L72 82 L66 112 L34 112 Z" fill="#ffffff"/>
                 <path d="M50 82 C 30 60, 30 30, 46 8 C 40 40, 46 65, 50 82 Z" fill="#28a745" opacity="0.85"/>
                 <path d="M50 82 C 70 55, 66 25, 50 4 C 60 35, 56 65, 50 82 Z" fill="#28a745"/>
+            </svg>
+        </div>
+
+        <div class="login-body">
+            <h2>Login</h2>
+
+            <form method="POST" action="/login" class="form-login">
+
+                {% if erro %}
+                    <p class="erro-msg">{{ erro }}</p>
+                {% endif %}
+
+                <div class="campo">
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+                        <path d="M3 7l9 6 9-6"></path>
+                    </svg>
+                    <input
+                        type="text"
+                        name="matricula"
+                        placeholder="Matrícula"
+                        required
+                        pattern="[0-9]+"
+                        title="A matrícula deve conter apenas números"
+                    >
+                </div>
+
+                <div class="campo senha">
+                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                    </svg>
+                    <input
+                        type="password"
+                        name="senha"
+                        id="campo-senha"
+                        placeholder="Senha"
+                        required
+                    >
+                    <button type="button" class="botao-olho" id="botao-olho" aria-label="Mostrar senha">
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+
+                <a href="https://suap.ifpb.edu.br/comum/solicitar_trocar_senha/" class="info-senha">
+                    Esqueceu a senha?
+                </a>
+
+                <button type="submit" class="btn-login">Acessar</button>
+            </form>
+
+            <p class="rodape-login">Espaço Seguro Digital &middot; IFPB</p>
+        </div>
+    </div>
+
+    <script>
+        var botaoOlho = document.getElementById('botao-olho');
+        var campoSenha = document.getElementById('campo-senha');
+
+        botaoOlho.addEventListener('click', function () {
+            var mostrando = campoSenha.getAttribute('type') === 'text';
+            campoSenha.setAttribute('type', mostrando ? 'password' : 'text');
+            botaoOlho.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+        });
+    </script>
+</body>
+</html>
