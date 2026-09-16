@@ -40,56 +40,78 @@
 
     <main class="conteudo-principal">
 
-        <div style="width: 100%; margin-bottom: 40px;">
+        <div class="hero-banner">
             <img 
                 src="/static/imagens/Imagem_tela.jpeg" 
                 alt="ESDI - Espaço Seguro Digital" 
-                style="
-                    width: 100%;
-                    max-height: 260px;
-                    object-fit: cover;
-                    border-radius: 12px;
-                    display: block;
-                "
             >
+            <span class="hero-selo"><i class="fa-solid fa-lock"></i> 100% sigiloso</span>
+            <div class="hero-texto">
+                <h1>Olá, {{ session['nome'].split(' ')[0] }}!</h1>
+                <p>Seu espaço seguro para cuidar da sua saúde mental. Como podemos te ajudar hoje?</p>
+            </div>
+        </div>
+
+        <div class="info-rapida">
+            <div class="info-item">
+                <div class="info-icone"><i class="fa-solid fa-lock"></i></div>
+                <div class="info-texto"><strong>Sigilo garantido</strong>Seus dados e consultas são confidenciais</div>
+            </div>
+            <div class="info-item">
+                <div class="info-icone"><i class="fa-solid fa-bolt"></i></div>
+                <div class="info-texto"><strong>Agendamento rápido</strong>Marque em poucos cliques</div>
+            </div>
+            <div class="info-item">
+                <div class="info-icone"><i class="fa-solid fa-house-laptop"></i></div>
+                <div class="info-texto"><strong>Presencial ou online</strong>Escolha a modalidade que preferir</div>
+            </div>
         </div>
 
         <div class="secao-titulo">
             <i class="fa-solid fa-user-doctor"></i> ATENDIMENTO PSICOLÓGICO
         </div>
 
-        <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        <div class="grade-cards">
 
-            <a href="{{ url_for('auth.agenda') }}" class="card-suap">
-                <i class="fa-regular fa-calendar-plus card-icon"></i>
-                <span class="card-title">Minha Agenda</span>
-            </a>
-
-
-            <a href="{{ url_for('aluno.consultas') }}" class="card-suap">
+            <a href="{{ url_for('aluno.consultas') }}" class="card-suap card-destaque">
                 <i class="fa-solid fa-user-group card-icon"></i>
                 <span class="card-title">Agendar Consulta</span>
+                <span class="card-desc">Escolha modalidade e profissional</span>
+                <span class="card-saiba-mais">Agendar agora <i class="fa-solid fa-arrow-right"></i></span>
             </a>
-               
+
+            <a href="{{ url_for('auth.agenda') }}" class="card-suap card-destaque">
+                <i class="fa-regular fa-calendar-plus card-icon"></i>
+                <span class="card-title">Minha Agenda</span>
+                <span class="card-desc">Veja as consultas que você já marcou</span>
+                <span class="card-saiba-mais">Ver agenda <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+
             <a href="{{ url_for('aluno.historico') }}" class="card-suap">
                 <i class="fa-solid fa-clock-rotate-left card-icon"></i>
                 <span class="card-title">Histórico de Consultas</span>
+                <span class="card-desc">Consultas já realizadas ou canceladas</span>
+                <span class="card-saiba-mais">Ver histórico <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
             <a href="{{ url_for('ajuda') }}" class="card-suap" style="width:100%;">
                 <i class="fa-solid fa-phone card-icon"></i>
                 <span class="card-title">Procurar Ajuda</span>
+                <span class="card-desc">Contatos e apoio psicológico emergencial</span>
+                <span class="card-saiba-mais">Ver contatos <i class="fa-solid fa-arrow-right"></i></span>
             </a>
         </div>
 
-        <div class="secao-titulo" style="margin-top: 40px;">
+        <div class="secao-titulo">
             <i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE
         </div>
 
-        <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        <div class="grade-cards">
             <a href="{{ url_for('dicas') }}" class="card-suap">
                 <i class="fa-solid fa-handshake-angle card-icon"></i>
                 <span class="card-title">Dicas</span>
+                <span class="card-desc">Bem-estar, saúde mental e organização</span>
+                <span class="card-saiba-mais">Ler dicas <i class="fa-solid fa-arrow-right"></i></span>
             </a>
 
         </div>
