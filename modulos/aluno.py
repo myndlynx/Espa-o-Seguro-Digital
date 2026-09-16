@@ -46,14 +46,83 @@ def agendar():
 
     return render_template('agendar.html', psicologos=opcoes_psicologos)
 
+def _atualizar_consultas_concluidas():
+    agora = datetime.now()
+    for c in consultas_db:
+        if c.get('status') == 'Agendado':
+            try:
+                data_hora_consulta = datetime.strptime(
+                    f"{c['data']} {c['horario']}",
+                    "%d/%m/%Y %H:%M"
+                )
+                if data_hora_consulta <= agora:
+                    c['status'] = 'Concluída'
+            except ValueError:
+                pass
+
+
 @aluno_bp.route('/agendar-horarios', methods=['POST'])
 def agendar_horarios():
-    if session.get('tipo') != 'aluno': return redirect(url_for('auth.login'))
+    if session.get('tipo') != 'aluno':
+        return redirect(url_for('auth.login'))
+
     modalidade = request.form.get('modalidade')
     psicologo_nome = request.form.get('psicologo')
-    horarios_livres = [c for c in consultas_db if c['psicologo_nome'] == psicologo_nome and c['modalidade'] == modalidade and c['status'] == 'Livre']
-    return render_template('agendar_horarios.html', psicologo_nome=psicologo_nome, modalidade=modalidade, horarios=horarios_livres)
 
+    agora = datetime.now()
+    horarios_livres = []
+
+    for c in consultas_db:
+        if (
+            c['psicologo_nome'] == psicologo_nome
+            and c['modalidade'] == modalidade
+            and c['status'] == 'Livre'
+        ):
+            try:
+                data_hora_consulta = datetime.strptime(
+                    f"{c['data']} {c['horario']}",
+                    "%d/%m/%Y %H:%M"
+                )
+                
+                if data_hora_consulta > agora:
+                    horarios_livres.append(c)
+
+            except ValueError:
+                pass
+
+    return render_template(
+        'agendar_horarios.html',
+        psicologo_nome=psicologo_nome,
+        modalidade=modalidade,
+        horarios=horarios_livres
+    )
+
+
+@aluno_bp.route('/consultas/historico', methods=['GET'])
+def historico():
+    if session.get('tipo') != 'aluno':
+        return redirect(url_for('auth.login'))
+
+    _atualizar_consultas_concluidas()
+
+    meu_historico = []
+
+    for c in consultas_db:
+        if (
+            c.get('aluno_matricula') == session['usuario']
+            and c.get('status') in [
+                'Concluída',
+                'concluida',
+                'Cancelada',
+                'cancelada'
+            ]
+        ):
+            meu_historico.append(c)
+
+    return render_template(
+        'historico.html',
+        historico=meu_historico
+    )
 @aluno_bp.route('/agenda/cancelar', methods=['POST'])
 def cancelar_consulta_aluno():
     if session.get('tipo') != 'aluno': return redirect(url_for('auth.login'))
@@ -142,14 +211,3 @@ def consultas():
                     opcoes_psicologos.append(opcao)
 
     return render_template('consulta.html', psicologos=opcoes_psicologos)
-
-@aluno_bp.route('/consultas/historico', methods=['GET'])
-def historico():
-    if session.get('tipo') != 'aluno': return redirect(url_for('auth.login'))
-
-    meu_historico = []
-    for c in consultas_db:
-        if c.get('aluno_matricula') == session['usuario'] and c.get('status') in ['Concluída', 'concluida', 'Cancelada', 'cancelada']:
-            meu_historico.append(c)
-
-    return render_template('historico.html', historico=meu_historico)
