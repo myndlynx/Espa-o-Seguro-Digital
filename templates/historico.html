@@ -13,23 +13,35 @@
             <li><a href="{{ url_for('auth.area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
             <li><a href="{{ url_for('auth.agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
             <li><a href="{{ url_for('aluno.historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO</a></li>
-            <li><a href="{{ url_for('auth.logout') }}" class="menu-sair">SAIR</a></li>
+            <li style="margin-top: auto;"><a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a></li>
         </ul>
     </aside>
 
     <main class="conteudo-principal">
-        <h2 class="secao-titulo">HISTÓRICO DE CONSULTAS</h2>
+        <h2 class="secao-titulo">MEU HISTÓRICO DE CONSULTAS</h2>
 
         {% if historico|length == 0 %}
-            <p>Você ainda não possui consultas canceladas.</p>
+            <p style="color: #666;">Você ainda não possui consultas no histórico.</p>
         {% else %}
             {% for c in historico %}
-                <div class="card-consulta">
-                    <div class="nome-medico">{{ c.psicologo_nome }}</div>
+                <div class="card-consulta" style="opacity: 0.9;">
+                    <div class="nome-medico" style="color: #333;">{{ c.psicologo_nome }}</div>
                     <div class="detalhes">
-                        <div>{{ c.data }} às {{ c.horario }} — {{ c.modalidade }}</div>
+                        <div><i class="fa-solid fa-calendar-day"></i> {{ c.data }} às {{ c.horario }}</div>
+                        <div><i class="fa-solid fa-stethoscope"></i> {{ c.modalidade }}</div>
                     </div>
-                    <span class="status cancelada"><span class="bolinha cancelada"></span> Cancelada</span>
+                    
+                    <div style="margin-top: 15px;">
+                        {% if c.status == 'Concluída' or c.status == 'concluida' %}
+                            <span style="color: #017193; font-weight: bold; background: #e0f4f9; padding: 5px 10px; border-radius: 5px; font-size: 13px;">
+                                <i class="fa-solid fa-check-double"></i> Concluída
+                            </span>
+                        {% else %}
+                            <span style="color: #dc3545; font-weight: bold; background: #f8d7da; padding: 5px 10px; border-radius: 5px; font-size: 13px;">
+                                <i class="fa-solid fa-ban"></i> Cancelada
+                            </span>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         {% endif %}

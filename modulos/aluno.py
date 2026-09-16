@@ -149,8 +149,7 @@ def historico():
 
     meu_historico = []
     for c in consultas_db:
-        if c.get('aluno_matricula') == session['usuario'] and c['status'] == 'Cancelada':
+        if c.get('aluno_matricula') == session['usuario'] and c.get('status') in ['Concluída', 'concluida', 'Cancelada', 'cancelada']:
             meu_historico.append(c)
 
     return render_template('historico.html', historico=meu_historico)
-
