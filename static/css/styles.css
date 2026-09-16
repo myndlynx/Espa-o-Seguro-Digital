@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
 * {
     box-sizing: border-box;
 }
@@ -100,59 +102,269 @@ body {
 .conteudo-principal {
     flex: 1;
     background-color: #fdfbf7;
-    padding: 40px 50px;
+    padding: 44px 56px;
     overflow-y: auto;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.conteudo-principal h1,
+.conteudo-principal h2,
+.conteudo-principal h3 {
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero-banner {
+    position: relative;
+    width: 100%;
+    margin-bottom: 0;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(1, 113, 147, 0.12);
+}
+
+.hero-banner img {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.hero-banner .hero-texto {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 24px 30px;
+    background: linear-gradient(0deg, rgba(1,113,147,0.75) 0%, rgba(1,113,147,0) 100%);
+    color: #ffffff;
+}
+
+.hero-banner .hero-texto h1 {
+    margin: 0 0 4px 0;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.hero-banner .hero-texto p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+/* ===== Faixa de informações rápidas, flutuando sobre o hero ===== */
+.info-rapida {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px 26px;
+    margin: -26px 0 44px 0;
+    box-shadow: 0 10px 30px rgba(23, 43, 77, 0.10);
+    position: relative;
+    z-index: 2;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 190px;
+}
+
+.info-item .info-icone {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(1, 113, 147, 0.10);
+    color: #017193;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.info-item .info-texto {
+    font-size: 12px;
+    color: #8a94a6;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.info-item .info-texto strong {
+    display: block;
+    color: #223047;
+    font-size: 13.5px;
+    font-weight: 700;
 }
 
 .secao-titulo {
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 700;
     color: #708fbd;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    letter-spacing: 1.2px;
+    margin-bottom: 22px;
     display: flex;
     align-items: center;
     gap: 10px;
+    padding-left: 14px;
+    border-left: 4px solid #017193;
+}
+
+.grade-cards {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 44px;
 }
 
 .card-suap {
-    width: 366px;
-    height: 180px;
-    border: 1px solid #e0e0e0;
-    border-radius: 20px;
+    width: 300px;
+    min-height: 180px;
+    border: none;
+    border-radius: 24px;
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    text-align: left;
     text-decoration: none;
-    padding: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    transition: 0.2s;
+    padding: 26px 24px;
+    box-shadow: 0 4px 18px rgba(23, 43, 77, 0.07);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card-suap:hover {
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(23, 43, 77, 0.14);
+}
+
+/* ===== Card em destaque: usado nas ações principais (Agendar Consulta / Minha Agenda) ===== */
+.card-destaque {
+    background: linear-gradient(150deg, #708fbd 0%, #017193 100%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-destaque::after {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    top: -50px;
+    right: -40px;
+}
+
+.card-destaque .card-icon {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+}
+
+.card-destaque .card-title {
+    color: #ffffff;
+}
+
+.card-destaque .card-desc {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.card-destaque .card-saiba-mais {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.16);
+    padding: 8px 14px;
+    border-radius: 999px;
+    width: fit-content;
+}
+
+.card-destaque:hover {
+    box-shadow: 0 16px 34px rgba(1, 113, 147, 0.35);
+}
+
+/* ===== Selo sobre o banner (estilo "badge") ===== */
+.hero-selo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #017193;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 999px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-saiba-mais {
+    margin-top: 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #017193;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-suap:hover .card-saiba-mais {
+    gap: 9px;
+    transition: gap 0.2s;
 }
 
 .card-icon {
-    font-size: 65px;
-    color: #708fbd;
-    margin-bottom: 15px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background-color: rgba(1, 113, 147, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #017193;
+    margin-bottom: 18px;
 }
 
 .card-title {
-    color: #708fbd;
-    font-size: 16px;
-    text-align: center;
+    color: #223047;
+    font-size: 17px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.card-desc {
+    display: block;
+    color: #8a94a6;
+    font-size: 12.5px;
+    font-weight: 400;
+    margin-top: 6px;
+    text-align: left;
 }
 
 .card {
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 26px;
+    border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(23, 43, 77, 0.07);
     max-width: 500px;
     margin-bottom: 20px;
+}
+
+.card label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #556173;
+    margin-bottom: 6px;
 }
 
 .card input, 
@@ -160,25 +372,40 @@ body {
 .card button {
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 13px 14px;
     margin-top: 5px;
     margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    border-radius: 10px;
+    border: 1px solid #e2e6ea;
+    background: #fbfcfd;
+    font-family: inherit;
+    font-size: 14px;
     box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card input:focus,
+.card select:focus {
+    outline: none;
+    border-color: #017193;
+    box-shadow: 0 0 0 3px rgba(1, 113, 147, 0.12);
+    background: #ffffff;
 }
 
 .card button {
     background: #017193;
     color: white;
-    font-weight: bold;
+    font-weight: 700;
     cursor: pointer;
     border: none;
-    transition: 0.2s;
+    padding: 14px;
+    border-radius: 10px;
+    transition: background 0.2s, transform 0.15s;
 }
 
 .card button:hover {
     background: #015a77;
+    transform: translateY(-1px);
 }
 
 .livre {
@@ -193,44 +420,46 @@ body {
 
 .card-aluno {
     background: white;
-    border-left: 5px solid #e06c4c;
-    padding: 15px;
-    border-radius: 5px;
+    border-left: 5px solid #017193;
+    padding: 18px 20px;
+    border-radius: 14px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 14px rgba(23, 43, 77, 0.06);
     max-width: 600px;
 }
 
 .card-aluno h3 {
     margin-top: 0; 
-    color: #333;
-    font-size: 18px;
+    color: #223047;
+    font-size: 17px;
+    font-weight: 700;
 }
 
 .card-aluno p {
-    color: #555;
+    color: #667085;
     margin: 5px 0;
+    font-size: 14px;
 }
 
 .card-consulta { 
     background: white; 
-    padding: 20px; 
-    border-radius: 12px; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+    padding: 22px; 
+    border-radius: 18px; 
+    box-shadow: 0 4px 16px rgba(23, 43, 77, 0.07); 
     max-width: 500px; 
-    margin-bottom: 15px; 
-    border: 1px solid #e0e0e0; 
+    margin-bottom: 16px; 
+    border: none; 
 }
 
 .nome-medico { 
     color: #017193; 
     font-size: 18px; 
-    font-weight: bold; 
+    font-weight: 700; 
     margin-bottom: 10px; 
 }
 
 .detalhes { 
-    color: #666; 
+    color: #667085; 
     font-size: 14px; 
     margin-bottom: 15px; 
 }
@@ -254,51 +483,64 @@ body {
 
 .box { 
     width: 100%; 
-    max-width: 500px; 
+    max-width: 560px; 
     background-color: #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    margin: 40px auto;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 6px 22px rgba(23, 43, 77, 0.08);
+    margin: 0 auto;
 }
 
 .horarios-titulo {
     margin-bottom: 5px;
-    color: #708fbd;
+    color: #223047;
+    font-size: 19px;
+    font-weight: 700;
 }
 
 .horarios-info {
     color: #708fbd;
     margin-top: 0;
+    font-size: 14px;
 }
 
 .horarios-voltar {
-    color: #708fbd;
+    color: #017193;
     text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 .horarios-voltar:hover {
     text-decoration: underline;
 }
 
+.grade-horarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+
 .btn-hora { 
-    background: #f0f0f0; 
-    border: 1px solid #ccc; 
-    padding: 15px; 
-    border-radius: 8px; 
+    background: #fbfcfd; 
+    border: 1.5px solid #e2e6ea; 
+    padding: 16px 14px; 
+    border-radius: 12px; 
     cursor: pointer; 
-    color: #333; 
-    font-size: 16px; 
-    margin-bottom: 10px; 
-    text-align: left; 
+    color: #223047; 
+    font-size: 14px; 
+    margin-bottom: 0; 
+    text-align: center; 
     display: block; 
     width: 100%; 
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
 }
 
 .btn-hora:hover { 
     background: #017193; 
     color: white; 
+    border-color: #017193;
+    transform: translateY(-2px);
 }
 
 .painel-psicologo {
@@ -388,6 +630,43 @@ body {
         box-sizing: border-box;
     }
 
+    .hero-banner {
+        margin-bottom: 0;
+        border-radius: 16px;
+    }
+
+    .hero-banner .hero-texto h1 {
+        font-size: 18px;
+    }
+
+    .hero-selo {
+        top: 12px;
+        right: 12px;
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+
+    .info-rapida {
+        flex-direction: column;
+        gap: 14px;
+        margin: -18px 0 32px 0;
+        padding: 18px 18px;
+        border-radius: 16px;
+    }
+
+    .info-item {
+        min-width: 0;
+    }
+
+    .grade-cards {
+        gap: 14px;
+        margin-bottom: 32px;
+    }
+
+    .grade-horarios {
+        grid-template-columns: 1fr 1fr;
+    }
+
     .painel-psicologo {
         flex-direction: column;
         gap: 20px;
@@ -406,6 +685,29 @@ body {
         margin-left: 0;
         margin-right: 0;
     }
+}
+
+.alerta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.alerta-sucesso {
+    background-color: #e3f6e8;
+    color: #1e7e34;
+    border: 1px solid #c3e6cb;
+}
+
+.alerta-erro {
+    background-color: #fbe6e8;
+    color: #a3212e;
+    border: 1px solid #f5c6cb;
 }
 
 .status.cancelada { color: #dc3545; }
