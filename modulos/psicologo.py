@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, flash
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from banco import consultas_db, id_consulta_atual
 
 psicologo_bp = Blueprint('psicologo', __file__)
@@ -21,36 +21,50 @@ def psicologo_agendamentos():
         else:
             data_formatada = data_raw
 
-        horario_duplicado = False
-        for c in consultas_db:
-            if c['psicologo_matricula'] == session['usuario'] and c['data'] == data_formatada and c['horario'] == horario_form:
-                horario_duplicado = True
-                break
+        agora = datetime.utcnow() - timedelta(hours=3)
+        try:
+            data_hora_cadastro = datetime.strptime(f"{data_formatada} {horario_form}", "%d/%m/%Y %H:%M")
+            horario_passado = data_hora_cadastro < agora
+        except ValueError:
+            horario_passado = False
 
-        if horario_duplicado:
-            erro = "Você já possui um horário cadastrado para esta data e hora!"
+        if horario_passado:
+            erro = "Erro: Não é possível cadastrar um horário que já passou."
         else:
-            nova_disponibilidade = {
-                "id": id_consulta_atual,
-                "psicologo_matricula": session['usuario'],
-                "psicologo_nome": session['nome'],
-                "campus": session['campus'],
-                "data": data_formatada,
-                "horario": horario_form,
-                "modalidade": request.form.get('modalidade'),
-                "status": "Livre",
-                "aluno_matricula": None,
-                "aluno_nome": None
-            }
-            consultas_db.append(nova_disponibilidade)
-            id_consulta_atual += 1
-            flash("Horário cadastrado com sucesso!", "sucesso")
-            return redirect(url_for('psicologo.psicologo_agendamentos'))
+            horario_duplicado = False
+            for c in consultas_db:
+                if c['psicologo_matricula'] == session['usuario'] and c['data'] == data_formatada and c['horario'] == horario_form:
+                    horario_duplicado = True
+                    break
+
+            if horario_duplicado:
+                erro = "Você já possui um horário cadastrado para esta data e hora!"
+            else:
+                nova_disponibilidade = {
+                    "id": id_consulta_atual,
+                    "psicologo_matricula": session['usuario'],
+                    "psicologo_nome": session['nome'],
+                    "campus": session['campus'],
+                    "data": data_formatada,
+                    "horario": horario_form,
+                    "modalidade": request.form.get('modalidade'),
+                    "status": "Livre",
+                    "aluno_matricula": None,
+                    "aluno_nome": None
+                }
+                consultas_db.append(nova_disponibilidade)
+                id_consulta_atual += 1
+                flash("Horário cadastrado com sucesso!", "sucesso")
+                return redirect(url_for('psicologo.psicologo_agendamentos'))
         
-    minha_agenda = [c for c in consultas_db if c['psicologo_matricula'] == session['usuario']]
+    minha_agenda = [
+        c for c in consultas_db 
+        if c['psicologo_matricula'] == session['usuario'] 
+        and c.get('status') not in ['Concluída', 'concluida', 'Cancelada', 'cancelada']
+    ]
     
-    hoje = date.today().strftime('%Y-%m-%d')
-    limite = (date.today() + timedelta(days=365)).strftime('%Y-%m-%d')
+    hoje = (datetime.utcnow() - timedelta(hours=3)).strftime('%Y-%m-%d')
+    limite = ((datetime.utcnow() - timedelta(hours=3)) + timedelta(days=365)).strftime('%Y-%m-%d')
     
     return render_template('psicologo_agendamentos.html', minha_agenda=minha_agenda, hoje=hoje, limite=limite, erro=erro)
 

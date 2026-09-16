@@ -1,9 +1,60 @@
 from flask import Blueprint, session, render_template, redirect, url_for, request, flash
 from banco import lista_campi, consultas_db
-from datetime import datetime
-
+from datetime import datetime, timedelta
 
 aluno_bp = Blueprint('aluno', __file__)
+
+def _atualizar_consultas_concluidas():
+    agora = datetime.utcnow() - timedelta(hours=3)
+    for c in consultas_db:
+        if c.get('status') == 'Agendado':
+            try:
+                data_hora_consulta = datetime.strptime(
+                    f"{c['data']} {c['horario']}",
+                    "%d/%m/%Y %H:%M"
+                )
+                if data_hora_consulta <= agora:
+                    c['status'] = 'Concluída'
+            except ValueError:
+                pass
+
+@aluno_bp.route('/agendar-horarios', methods=['POST'])
+def agendar_horarios():
+    if session.get('tipo') != 'aluno':
+        return redirect(url_for('auth.login'))
+
+    modalidade = request.form.get('modalidade')
+    psicologo_nome = request.form.get('psicologo')
+
+    agora = datetime.utcnow() - timedelta(hours=3)
+    horarios_livres = []
+
+    for c in consultas_db:
+        if (
+            c['psicologo_nome'] == psicologo_nome
+            and c['modalidade'] == modalidade
+            and c['status'] == 'Livre'
+        ):
+            try:
+                data_hora_consulta = datetime.strptime(
+                    f"{c['data']} {c['horario']}",
+                    "%d/%m/%Y %H:%M"
+                )
+                
+                if data_hora_consulta > agora:
+                    horarios_livres.append(c)
+
+            except ValueError:
+                pass
+
+    return render_template(
+        'agendar_horarios.html',
+        psicologo_nome=psicologo_nome,
+        modalidade=modalidade,
+        horarios=horarios_livres
+    )
+
+
 
 def _proximo_id():
     lista_de_ids = []
@@ -45,57 +96,6 @@ def agendar():
                     opcoes_psicologos.append(opcao)
 
     return render_template('agendar.html', psicologos=opcoes_psicologos)
-
-def _atualizar_consultas_concluidas():
-    agora = datetime.now()
-    for c in consultas_db:
-        if c.get('status') == 'Agendado':
-            try:
-                data_hora_consulta = datetime.strptime(
-                    f"{c['data']} {c['horario']}",
-                    "%d/%m/%Y %H:%M"
-                )
-                if data_hora_consulta <= agora:
-                    c['status'] = 'Concluída'
-            except ValueError:
-                pass
-
-
-@aluno_bp.route('/agendar-horarios', methods=['POST'])
-def agendar_horarios():
-    if session.get('tipo') != 'aluno':
-        return redirect(url_for('auth.login'))
-
-    modalidade = request.form.get('modalidade')
-    psicologo_nome = request.form.get('psicologo')
-
-    agora = datetime.now()
-    horarios_livres = []
-
-    for c in consultas_db:
-        if (
-            c['psicologo_nome'] == psicologo_nome
-            and c['modalidade'] == modalidade
-            and c['status'] == 'Livre'
-        ):
-            try:
-                data_hora_consulta = datetime.strptime(
-                    f"{c['data']} {c['horario']}",
-                    "%d/%m/%Y %H:%M"
-                )
-                
-                if data_hora_consulta > agora:
-                    horarios_livres.append(c)
-
-            except ValueError:
-                pass
-
-    return render_template(
-        'agendar_horarios.html',
-        psicologo_nome=psicologo_nome,
-        modalidade=modalidade,
-        horarios=horarios_livres
-    )
 
 
 @aluno_bp.route('/consultas/historico', methods=['GET'])
@@ -145,8 +145,7 @@ def cancelar_consulta_aluno():
             })
 
             c['status'] = 'Cancelada'
-            c['cancelado_em'] = datetime.now().strftime('%d/%m/%Y %H:%M')
-
+            c['cancelado_em'] = (datetime.utcnow() - timedelta(hours=3)).strftime('%d/%m/%Y %H:%M')
             flash("Consulta cancelada com sucesso!", "sucesso")
             break
 
