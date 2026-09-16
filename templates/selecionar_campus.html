@@ -3,156 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selecionar Campus</title>
+    <title>Selecionar Campus - Espaço Seguro Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url("{{ url_for('static', filename='imagens/fundinho.jpeg.png') }}");
-            background-size: cover;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --cor-primaria: #017193;
+            --cor-primaria-escura: #015a77;
+            --cor-secundaria: #708fbd;
+            --cor-secundaria-escura: #4772b3;
+            --cor-fundo: #f4f7f6;
+            --cor-texto: #223047;
+            --cor-texto-claro: #6b7280;
         }
-        .quadrado {
-            width: 500px;
-            background-color: rgb(165, 255, 252);
-            border-radius: 30px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            /* Define uma altura máxima para a caixa não vazar na tela */
-            max-height: 85vh; 
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* ===== Ocupa a tela inteira, no mesmo padrão do login ===== */
+        .campus-card {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            animation: aparecer 0.5s ease-out;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .campus-header {
+            position: relative;
+            flex: 0 0 auto;
+            padding: 40px 30px 34px 30px;
+            background: linear-gradient(150deg, var(--cor-secundaria) 0%, var(--cor-primaria) 100%);
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .blob-1 { width: 150px; height: 150px; top: -55px; left: -55px; }
+        .blob-2 { width: 80px; height: 80px; top: 15px; left: 80px; background: rgba(255,255,255,0.08); }
+
+        .campus-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+        }
+
+        .campus-header p {
+            margin: 6px 0 0 0;
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===== Corpo ===== */
+        .campus-body {
+            position: relative;
+            flex: 1 1 auto;
+            background: #ffffff;
+            border-radius: 28px 28px 0 0;
+            margin-top: -20px;
+            padding: 28px 24px 24px 24px;
+            z-index: 3;
             display: flex;
             flex-direction: column;
         }
-        h2 { 
-            color: #017193; 
-            margin-bottom: 20px; 
-            margin-top: 0;
-        }
-        
-        /* ESTILOS DA BARRA DE PESQUISA */
-        .barra-pesquisa {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 2px solid #00bbd8;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-            outline: none;
-        }
-        .barra-pesquisa:focus {
-            border-color: #006080;
-            box-shadow: 0 0 5px rgba(0, 187, 216, 0.5);
+
+        .campo-busca {
+            position: relative;
+            margin-bottom: 18px;
         }
 
-        /* ESTILOS DA LISTA ROLÁVEL */
+        .campo-busca svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: var(--cor-secundaria);
+            fill: none;
+            pointer-events: none;
+        }
+
+        .barra-pesquisa {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            border-radius: 12px;
+            border: 1px solid #e2e6ea;
+            background: var(--cor-fundo);
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--cor-texto);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .barra-pesquisa:focus {
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 3px rgba(1, 113, 147, 0.12);
+            background: #ffffff;
+        }
+
         .opcoes-lista {
             display: flex;
             flex-direction: column;
             gap: 10px;
             margin-bottom: 20px;
-            /* Faz a lista ter rolagem (scroll) se ficar muito grande */
-            overflow-y: auto; 
-            padding-right: 10px;
+            overflow-y: auto;
             flex-grow: 1;
+            padding-right: 4px;
         }
 
-        /* Personalizando a barrinha de rolagem (Scrollbar) */
-        .opcoes-lista::-webkit-scrollbar { width: 8px; }
-        .opcoes-lista::-webkit-scrollbar-track { background: #e0faff; border-radius: 10px; }
-        .opcoes-lista::-webkit-scrollbar-thumb { background: #00bbd8; border-radius: 10px; }
+        .opcoes-lista::-webkit-scrollbar { width: 6px; }
+        .opcoes-lista::-webkit-scrollbar-track { background: transparent; }
+        .opcoes-lista::-webkit-scrollbar-thumb { background: #d8dee5; border-radius: 10px; }
 
         .campus-label {
             width: 100%;
             display: block;
         }
+
         .campus-item {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--cor-fundo);
+            padding: 15px 16px;
+            border-radius: 14px;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 1.5px solid transparent;
             transition: 0.2s;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
+            font-weight: 600;
+            font-size: 14.5px;
+            color: var(--cor-texto);
+        }
+
+        .campus-item svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--cor-secundaria);
+            fill: none;
+            flex-shrink: 0;
+        }
+
+        .campus-item .icone-check {
+            margin-left: auto;
+            display: none;
         }
 
         input[type="radio"] { display: none; }
 
         input[type="radio"]:checked + .campus-item {
-            background: #00bbd8;
+            background: var(--cor-primaria);
             color: white;
-            border-color: #006080;
-            transform: scale(1.02);
+            border-color: var(--cor-primaria-escura);
+        }
+
+        input[type="radio"]:checked + .campus-item svg {
+            stroke: white;
+        }
+
+        input[type="radio"]:checked + .campus-item .icone-check {
+            display: block;
         }
 
         .campus-item:hover {
-            background: #e0faff;
-            border-color: #00bbd8;
+            background: #e5f3f7;
+            border-color: var(--cor-primaria);
+        }
+
+        .sem-resultado {
+            text-align: center;
+            color: var(--cor-texto-claro);
+            font-size: 14px;
+            padding: 24px 10px;
+            display: none;
         }
 
         .btn-confirmar {
             width: 100%;
-            padding: 14px;
-            font-size: 17px;
-            font-weight: bold;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
             border: none;
-            border-radius: 8px;
-            background: #00bbd8;
+            border-radius: 12px;
+            background: var(--cor-primaria);
             color: white;
             cursor: pointer;
             flex-shrink: 0;
+            font-family: inherit;
+            transition: background 0.2s, transform 0.15s;
         }
-        .btn-confirmar:hover { background: #006080; }
+
+        .btn-confirmar:hover {
+            background: var(--cor-primaria-escura);
+            transform: translateY(-1px);
+        }
+
+        /* ===== Layout para computador / notebook ===== */
+        @media (min-width: 860px) {
+            .campus-card {
+                flex-direction: row;
+            }
+
+            .campus-header {
+                flex: 0 0 42%;
+                padding: 60px 50px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .campus-header h1 {
+                font-size: 38px;
+            }
+
+            .campus-header p {
+                font-size: 15px;
+                max-width: 260px;
+            }
+
+            .campus-body {
+                flex: 1 1 58%;
+                margin-top: 0;
+                border-radius: 0;
+                padding: 60px 70px;
+                justify-content: center;
+            }
+
+            .opcoes-lista {
+                max-height: 55vh;
+            }
+
+            .campus-body form {
+                max-width: 420px;
+                width: 100%;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                min-height: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="quadrado">
-        <h2>Selecionar Campus</h2>
-        
-        <input type="text" id="inputPesquisa" class="barra-pesquisa" placeholder="Digite para buscar seu campus..." onkeyup="filtrarCampi()">
+    <div class="campus-card">
 
-        <form action="/salvar-campus" method="POST" style="display: flex; flex-direction: column; flex-grow: 1; overflow: hidden;">
-            
-            <div class="opcoes-lista" id="listaCampi">
-                {% for c in campi %}
-                <label class="campus-label">
-                    <input type="radio" name="campus_nome" value="{{ c.nome }}" required>
-                    <div class="campus-item">{{ c.nome }}</div>
-                </label>
-                {% endfor %}
+        <div class="campus-header">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <h1>Selecionar Campus</h1>
+            <p>Escolha o campus onde você estuda para continuarmos o seu cadastro no Espaço Seguro Digital.</p>
+        </div>
+
+        <div class="campus-body">
+            <div class="campo-busca">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="M21 21l-4.3-4.3"></path>
+                </svg>
+                <input type="text" id="inputPesquisa" class="barra-pesquisa" placeholder="Digite para buscar seu campus..." onkeyup="filtrarCampi()">
             </div>
-            
-            <button type="submit" class="btn-confirmar">Confirmar Seleção</button>
-        </form>
+
+            <form action="/salvar-campus" method="POST" style="display: flex; flex-direction: column; flex-grow: 1; overflow: hidden;">
+
+                <div class="opcoes-lista" id="listaCampi">
+                    {% for c in campi %}
+                    <label class="campus-label">
+                        <input type="radio" name="campus_nome" value="{{ c.nome }}" required>
+                        <div class="campus-item">
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path>
+                                <circle cx="12" cy="10" r="2.5"></circle>
+                            </svg>
+                            {{ c.nome }}
+                            <svg class="icone-check" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke:white;">
+                                <path d="M20 6L9 17l-5-5"></path>
+                            </svg>
+                        </div>
+                    </label>
+                    {% endfor %}
+                    <p class="sem-resultado" id="semResultado">Nenhum campus encontrado.</p>
+                </div>
+
+                <button type="submit" class="btn-confirmar">Confirmar Seleção</button>
+            </form>
+        </div>
     </div>
 
     <script>
         function filtrarCampi() {
-            // Pega o que foi digitado e converte para letras minúsculas
             let input = document.getElementById('inputPesquisa');
             let filtro = input.value.toLowerCase();
-            
-            // Pega todos os itens da lista
+
             let lista = document.getElementById('listaCampi');
             let labels = lista.getElementsByClassName('campus-label');
+            let algumVisivel = false;
 
-            // Passa por cada item da lista conferindo o nome
             for (let i = 0; i < labels.length; i++) {
                 let nomeCampus = labels[i].innerText || labels[i].textContent;
-                
-                // Se o nome do campus tiver as letras digitadas, ele aparece, senão, ele some
+
                 if (nomeCampus.toLowerCase().indexOf(filtro) > -1) {
                     labels[i].style.display = "";
+                    algumVisivel = true;
                 } else {
                     labels[i].style.display = "none";
                 }
             }
+
+            document.getElementById('semResultado').style.display = algumVisivel ? "none" : "block";
         }
     </script>
 </body>
