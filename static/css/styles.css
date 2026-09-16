@@ -222,7 +222,8 @@ body {
 }
 
 .card-suap {
-    width: 300px;
+    width: calc((100% - 48px) / 3);
+    
     min-height: 180px;
     border: none;
     border-radius: 24px;
@@ -243,7 +244,6 @@ body {
     box-shadow: 0 16px 30px rgba(23, 43, 77, 0.14);
 }
 
-/* ===== Card em destaque: usado nas ações principais (Agendar Consulta / Minha Agenda) ===== */
 .card-destaque {
     background: linear-gradient(150deg, #708fbd 0%, #017193 100%);
     color: #ffffff;
