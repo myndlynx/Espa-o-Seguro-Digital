@@ -1,12 +1,11 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, flash
 from datetime import date, timedelta, datetime
-from banco import consultas_db, id_consulta_atual
+from banco import consultas_db, proximo_id
 
 psicologo_bp = Blueprint('psicologo', __file__)
 
 @psicologo_bp.route('/psicologo/agendamentos', methods=['GET', 'POST'])
 def psicologo_agendamentos():
-    global id_consulta_atual
     if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
     
     erro = None
@@ -41,7 +40,7 @@ def psicologo_agendamentos():
                 erro = "Você já possui um horário cadastrado para esta data e hora!"
             else:
                 nova_disponibilidade = {
-                    "id": id_consulta_atual,
+                    "id": proximo_id(),
                     "psicologo_matricula": session['usuario'],
                     "psicologo_nome": session['nome'],
                     "campus": session['campus'],
@@ -53,7 +52,6 @@ def psicologo_agendamentos():
                     "aluno_nome": None
                 }
                 consultas_db.append(nova_disponibilidade)
-                id_consulta_atual += 1
                 flash("Horário cadastrado com sucesso!", "sucesso")
                 return redirect(url_for('psicologo.psicologo_agendamentos'))
         
@@ -71,13 +69,16 @@ def psicologo_agendamentos():
 @psicologo_bp.route('/psicologo/cancelar-horario', methods=['POST'])
 def cancelar_horario():
     if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
-    
+
     id_consulta = int(request.form.get('id_consulta'))
-    global consultas_db
-    
-    consultas_db = [c for c in consultas_db if c['id'] != id_consulta]
+
+    for i, c in enumerate(consultas_db):
+        if c['id'] == id_consulta:
+            del consultas_db[i]
+            break
+
     flash("Horário cancelado com sucesso!", "sucesso")
-    
+
     return redirect(url_for('psicologo.psicologo_agendamentos'))
 
 @psicologo_bp.route('/psicologo/historico')

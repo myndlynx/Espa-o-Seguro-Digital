@@ -1,5 +1,5 @@
 from flask import Blueprint, session, render_template, redirect, url_for, request, flash
-from banco import lista_campi, consultas_db
+from banco import lista_campi, consultas_db, proximo_id
 from datetime import datetime, timedelta
 
 aluno_bp = Blueprint('aluno', __file__)
@@ -54,13 +54,6 @@ def agendar_horarios():
         horarios=horarios_livres
     )
 
-
-
-def _proximo_id():
-    lista_de_ids = []
-    for c in consultas_db:
-        lista_de_ids.append(c['id'])
-    return max(lista_de_ids) + 1
 
 
 @aluno_bp.route('/selecionar-campus')
@@ -132,7 +125,7 @@ def cancelar_consulta_aluno():
     for c in consultas_db:
         if c['id'] == id_consulta and c.get('aluno_matricula') == session['usuario']:
             consultas_db.append({
-                'id': _proximo_id(),
+                'id': proximo_id(),
                 'psicologo_matricula': c['psicologo_matricula'],
                 'psicologo_nome': c['psicologo_nome'],
                 'campus': c['campus'],

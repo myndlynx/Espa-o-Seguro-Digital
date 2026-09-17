@@ -1,5 +1,14 @@
 consultas_db = []
-id_consulta_atual = 1
+
+
+def proximo_id():
+    """Gera o próximo ID de consulta com base no maior ID já existente.
+    Usado tanto por aluno.py quanto por psicologo.py, para nunca gerar
+    o mesmo ID duas vezes."""
+    if not consultas_db:
+        return 1
+    return max(c['id'] for c in consultas_db) + 1
+
 
 lista_campi = [
     {'nome': 'Areia'}, {'nome': 'Cabedelo'}, {'nome': 'Cajazeiras'},
