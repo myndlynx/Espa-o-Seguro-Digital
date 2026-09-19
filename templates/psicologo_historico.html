@@ -37,18 +37,29 @@
     </aside>
 
     <main class="conteudo-principal">
-        <h2 class="secao-titulo"><i class="fa-solid fa-clock-rotate-left"></i> CONSULTAS AGENDADAS</h2>
-        <p style="color: #666; margin-bottom: 30px;">Abaixo estão as consultas marcadas pelos alunos na sua agenda:</p>
+        <h2 class="secao-titulo"><i class="fa-solid fa-check-circle"></i> CONSULTAS CONCLUÍDAS</h2>
+        <p style="color: #666; margin-bottom: 30px;">Abaixo estão as consultas finalizadas pelos alunos na sua agenda:</p>
 
         {% if consultas|length == 0 %}
-            <p style="color: #666;">Nenhuma consulta agendada até o momento.</p>
+            <p style="color: #666;">Nenhuma consulta concluída até o momento.</p>
         {% else %}
             {% for c in consultas %}
-                <div class="card-aluno">
-                    <h3>Paciente: {{ c.aluno_nome }} (Mat: {{ c.aluno_matricula }})</h3>
-                    <p><strong>📅 Data:</strong> {{ c.data }}</p>
-                    <p><strong>⏰ Horário:</strong> {{ c.horario }}</p>
-                    <p><strong>💻 Modalidade:</strong> {{ c.modalidade }}</p>
+                <div class="card-historico">
+                    
+                    <h3>{{ c.aluno_nome }}</h3>
+                    
+                    <p class="historico-detalhe">
+                        <i class="fa-solid fa-calendar-days"></i> {{ c.data }} às {{ c.horario }}
+                    </p>
+                    
+                    <p class="historico-modalidade">
+                        <i class="fa-solid fa-stethoscope"></i> {{ c.modalidade }}
+                    </p>
+                    
+                    <div class="badge-concluida">
+                        <i class="fa-solid fa-check-double"></i> Concluída
+                    </div>
+                    
                 </div>
             {% endfor %}
         {% endif %}

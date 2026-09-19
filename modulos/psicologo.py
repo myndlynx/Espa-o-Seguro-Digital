@@ -84,8 +84,31 @@ def cancelar_horario():
 @psicologo_bp.route('/psicologo/historico')
 def psicologo_historico():
     if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
-    consultas_marcadas = [c for c in consultas_db if c['psicologo_matricula'] == session['usuario'] and c['status'] == 'Agendado']
-    return render_template('psicologo_historico.html', consultas=consultas_marcadas)
+    
+    agora = datetime.utcnow() - timedelta(hours=3)
+    consultas_concluidas = []
+    
+    for c in consultas_db:
+        if c['psicologo_matricula'] == session['usuario'] and c['aluno_matricula'] is not None:
+            try:
+                data_hora_agendamento = datetime.strptime(f"{c['data']} {c['horario']}", "%d/%m/%Y %H:%M")
+            except ValueError:
+                try:
+                     data_hora_agendamento = datetime.strptime(f"{c['data']} {c['horario']}", "%Y-%m-%d %H:%M")
+                except ValueError:
+                    continue
+
+            if data_hora_agendamento < agora:
+                consultas_concluidas.append({
+                    'data': c['data'],
+                    'horario': c['horario'],
+                    'aluno_nome': c['aluno_nome'],
+                    'modalidade': c['modalidade']
+                })
+    
+    consultas_concluidas.sort(key=lambda x: f"{x['data'][6:10]}{x['data'][3:5]}{x['data'][0:2]} {x['horario']}", reverse=True)
+
+    return render_template('psicologo_historico.html', consultas=consultas_concluidas)
 
 @psicologo_bp.route('/psicologo/dicas')
 def psicologo_dicas():
