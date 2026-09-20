@@ -43,8 +43,19 @@
         {% if consultas|length == 0 %}
             <p style="color: #666;">Nenhuma consulta concluída até o momento.</p>
         {% else %}
+            <div style="margin-bottom: 20px;">
+                <label for="filtroModalidade" style="color: #666; font-size: 14px; margin-right: 8px;">
+                    <i class="fa-solid fa-filter"></i> Filtrar por modalidade:
+                </label>
+                <select id="filtroModalidade" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px;">
+                    <option value="">Todas</option>
+                    <option value="Online">Online</option>
+                    <option value="Presencial">Presencial</option>
+                </select>
+            </div>
+
             {% for c in consultas %}
-                <div class="card-historico">
+                <div class="card-historico" data-modalidade="{{ c.modalidade }}">
                     
                     <h3>{{ c.aluno_nome }}</h3>
                     
@@ -62,6 +73,8 @@
                     
                 </div>
             {% endfor %}
+
+            <script src="{{ url_for('static', filename='js/filtro_historico_psicologo.js') }}"></script>
         {% endif %}
     </main>
 </body>

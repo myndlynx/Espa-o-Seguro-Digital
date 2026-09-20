@@ -89,7 +89,11 @@ def psicologo_historico():
     consultas_concluidas = []
     
     for c in consultas_db:
-        if c['psicologo_matricula'] == session['usuario'] and c['aluno_matricula'] is not None:
+        if (
+            c['psicologo_matricula'] == session['usuario']
+            and c['aluno_matricula'] is not None
+            and c.get('status') not in ['Cancelada', 'cancelada']
+        ):
             try:
                 data_hora_agendamento = datetime.strptime(f"{c['data']} {c['horario']}", "%d/%m/%Y %H:%M")
             except ValueError:
