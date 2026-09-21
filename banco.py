@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 consultas_db = []
 
 
@@ -25,3 +27,19 @@ usuarios = [
     {"matricula": "202414610002", "senha": "12345p", "nome": "Dra. Ana Costa", "tipo": "psicologo", "campus": "Santa Rita"},
     {"matricula": "202414610004", "senha": "12345p", "nome": "Dr. Carlos Silva", "tipo": "psicologo", "campus": "João Pessoa"}
 ]
+
+def atualizar_consultas_concluidas():
+    """Marca como 'Concluída' toda consulta 'Agendado' cujo horário já passou.
+    Chamada tanto pelo módulo do aluno quanto pelo do psicólogo."""
+    agora = datetime.utcnow() - timedelta(hours=3)
+    for c in consultas_db:
+        if c.get('status') == 'Agendado':
+            try:
+                data_hora_consulta = datetime.strptime(
+                    f"{c['data']} {c['horario']}",
+                    "%d/%m/%Y %H:%M"
+                )
+                if data_hora_consulta <= agora:
+                    c['status'] = 'Concluída'
+            except ValueError:
+                pass

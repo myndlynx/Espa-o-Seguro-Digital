@@ -1,22 +1,9 @@
 from flask import Blueprint, session, render_template, redirect, url_for, request, flash
-from banco import lista_campi, consultas_db, proximo_id
+from banco import lista_campi, consultas_db, proximo_id, atualizar_consultas_concluidas
 from datetime import datetime, timedelta
 
 aluno_bp = Blueprint('aluno', __file__)
 
-def _atualizar_consultas_concluidas():
-    agora = datetime.utcnow() - timedelta(hours=3)
-    for c in consultas_db:
-        if c.get('status') == 'Agendado':
-            try:
-                data_hora_consulta = datetime.strptime(
-                    f"{c['data']} {c['horario']}",
-                    "%d/%m/%Y %H:%M"
-                )
-                if data_hora_consulta <= agora:
-                    c['status'] = 'Concluída'
-            except ValueError:
-                pass
 
 @aluno_bp.route('/agendar-horarios', methods=['POST'])
 def agendar_horarios():
@@ -96,7 +83,7 @@ def historico():
     if session.get('tipo') != 'aluno':
         return redirect(url_for('auth.login'))
 
-    _atualizar_consultas_concluidas()
+    atualizar_consultas_concluidas()
 
     meu_historico = []
 

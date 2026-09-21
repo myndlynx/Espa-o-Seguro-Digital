@@ -1,12 +1,14 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, flash
 from datetime import date, timedelta, datetime
-from banco import consultas_db, proximo_id
+from banco import consultas_db, proximo_id, atualizar_consultas_concluidas
 
 psicologo_bp = Blueprint('psicologo', __file__)
 
 @psicologo_bp.route('/psicologo/agendamentos', methods=['GET', 'POST'])
 def psicologo_agendamentos():
     if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
+
+    atualizar_consultas_concluidas()
     
     erro = None
     
@@ -55,11 +57,24 @@ def psicologo_agendamentos():
                 flash("Horário cadastrado com sucesso!", "sucesso")
                 return redirect(url_for('psicologo.psicologo_agendamentos'))
         
-    minha_agenda = [
-        c for c in consultas_db 
-        if c['psicologo_matricula'] == session['usuario'] 
-        and c.get('status') not in ['Concluída', 'concluida', 'Cancelada', 'cancelada']
-    ]
+    agora = datetime.utcnow() - timedelta(hours=3)
+
+    minha_agenda = []
+    for c in consultas_db:
+        if c['psicologo_matricula'] != session['usuario']:
+            continue
+        if c.get('status') in ['Concluída', 'concluida', 'Cancelada', 'cancelada']:
+            continue
+
+        if c.get('status') == 'Livre':
+            try:
+                data_hora = datetime.strptime(f"{c['data']} {c['horario']}", "%d/%m/%Y %H:%M")
+                if data_hora <= agora:
+                    continue  # horário livre já passou, some da lista
+            except ValueError:
+                pass
+
+        minha_agenda.append(c)
     
     hoje = (datetime.utcnow() - timedelta(hours=3)).strftime('%Y-%m-%d')
     limite = ((datetime.utcnow() - timedelta(hours=3)) + timedelta(days=365)).strftime('%Y-%m-%d')

@@ -86,6 +86,15 @@
                         <div>
                             <strong>{{ c.data }} às {{ c.horario }} ({{ c.modalidade }})</strong><br>
                             Status: <span class="{% if c.status == 'Livre' %}livre{% else %}ocupado{% endif %}">{{ c.status }}</span>
+
+
+                            {% if c.status == 'Agendado' and c.aluno_nome %}
+                            <br>
+                            <span style="font-size: 13px; color: #333;">
+                                <i class="fa-solid fa-user"></i> Aluno: <strong>{{ c.aluno_nome }}</strong>
+                                &nbsp;|&nbsp; Matrícula: <strong>{{ c.aluno_matricula }}</strong>
+                                </span>
+                            {% endif %}
                         </div>
                         
                         {% if c.status == 'Livre' %}

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, url_for, redirect, render_template, session
-from banco import usuarios, consultas_db
+from banco import usuarios, consultas_db, atualizar_consultas_concluidas
 from datetime import datetime
 
 auth_bp = Blueprint('auth',__file__)
@@ -35,6 +35,7 @@ def login():
 @auth_bp.route('/agenda')      # precisou vir para cá, mas é a agenda do ALUNO
 def agenda():
     if session.get('tipo') != 'aluno': return redirect(url_for('auth.login'))
+    atualizar_consultas_concluidas()
     meus_agendamentos = [c for c in consultas_db if c.get('aluno_matricula') == session['usuario'] and c['status'] == 'Agendado']
     meus_agendamentos.sort(key=chave_data_horario)
     return render_template('agenda.html', meus_agendamentos=meus_agendamentos)
