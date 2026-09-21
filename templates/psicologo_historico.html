@@ -43,19 +43,37 @@
         {% if consultas|length == 0 %}
             <p style="color: #666;">Nenhuma consulta concluída até o momento.</p>
         {% else %}
-            <div style="margin-bottom: 20px;">
-                <label for="filtroModalidade" style="color: #666; font-size: 14px; margin-right: 8px;">
-                    <i class="fa-solid fa-filter"></i> Filtrar por modalidade:
-                </label>
-                <select id="filtroModalidade" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px;">
-                    <option value="">Todas</option>
-                    <option value="Online">Online</option>
-                    <option value="Presencial">Presencial</option>
-                </select>
+            <div style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center;">
+                <div>
+                    <label for="filtroModalidade" style="color: #666; font-size: 14px; margin-right: 8px;">
+                        <i class="fa-solid fa-filter"></i> Filtrar por modalidade:
+                    </label>
+                    <select id="filtroModalidade" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px;">
+                        <option value="">Todas</option>
+                        <option value="Online">Online</option>
+                        <option value="Presencial">Presencial</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="filtroNome" style="color: #666; font-size: 14px; margin-right: 8px;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Buscar por aluno:
+                    </label>
+                    <input
+                        type="text"
+                        id="filtroNome"
+                        placeholder="Digite o nome do aluno..."
+                        style="padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px;"
+                    >
+                </div>
             </div>
 
+            <p id="semResultadoHistorico" style="display: none; color: #666;">
+                Nenhuma consulta encontrada para esse nome.
+            </p>
+
             {% for c in consultas %}
-                <div class="card-historico" data-modalidade="{{ c.modalidade }}">
+                <div class="card-historico" data-modalidade="{{ c.modalidade }}" data-nome="{{ c.aluno_nome }}">
                     
                     <h3>{{ c.aluno_nome }}</h3>
                     
