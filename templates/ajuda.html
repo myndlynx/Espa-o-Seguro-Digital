@@ -4,17 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Procurar Ajuda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
+<body>
 
-    <h1>Procurar Ajuda</h1>
-    <p>Informações de contato e como solicitar apoio psicológico emergencial.</p>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            ESDI
+        </div>
 
-    {% if session['tipo'] == 'psicologo' %}
-    <a href="{{ url_for('auth.area_psicologo') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
-    {% else %}
-    <a href="{{ url_for('auth.area_aluno') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
-    {% endif %}
+        <div class="sidebar-profile">
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #c9d8f0; font-size: 12px;">Bem-vindo(a),</span><br>
+                <b style="color: #fff; font-size: 14px;">{{ session['nome'] }}</b><br>
+                <small style="color: #c9d8f0; margin-top: 3px; display: inline-block;">
+                    <i class="fa-solid fa-location-dot"></i> Campus {{ session['campus'] }}
+                </small>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            {% if session['tipo'] == 'psicologo' %}
+            <li><a href="{{ url_for('auth.area_psicologo') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_agendamentos') }}"><i class="fa-solid fa-handshake-angle"></i> AGENDAMENTOS</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE CONSULTAS</a></li>
+            {% else %}
+            <li><a href="{{ url_for('auth.area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('auth.agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
+            <li><a href="{{ url_for('aluno.consultas') }}"><i class="fa-solid fa-user-group"></i> AGENDAR CONSULTA</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('ajuda') }}" class="ativo" aria-current="page"><i class="fa-solid fa-phone"></i> PROCURAR AJUDA</a></li>
+            <li><a href="{{ url_for('objetivo') }}"><i class="fa-solid fa-bullseye"></i> OBJETIVO DO SITE</a></li>
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="conteudo-principal">
+
+        <div class="hero-banner">
+            <img src="{{ url_for('static', filename='imagens/Imagem_tela.jpeg') }}" alt="ESDI - Espaço Seguro Digital">
+            <span class="hero-selo"><i class="fa-solid fa-lock"></i> 100% sigiloso</span>
+            <div class="hero-texto">
+                <h1>Procurar Ajuda</h1>
+                <p>Informações de contato e como solicitar apoio psicológico emergencial.</p>
+            </div>
+        </div>
+
+        <div class="ajuda-aviso" role="alert">
+            <div class="ajuda-aviso-icone"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="ajuda-aviso-texto">
+                <strong>Está em risco ou precisa de ajuda agora?</strong>
+                Não espere uma consulta: ligue para o <b>188</b> (CVV) ou para o <b>192</b> (SAMU). As ligações são gratuitas.
+            </div>
+        </div>
+
+        <div class="secao-titulo">
+            <i class="fa-solid fa-phone-volume"></i> CONTATOS DE EMERGÊNCIA
+        </div>
+
+        <div class="grade-cards grade-contatos">
+            {% for c in contatos %}
+            <a href="{{ c.link }}"
+               class="card-suap{% if c.destaque %} card-destaque{% endif %}"
+               {% if c.externo %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                <i class="{{ c.icone }} card-icon"></i>
+                {% if c.numero %}<span class="card-numero">{{ c.numero }}</span>{% endif %}
+                <span class="card-title">{{ c.nome }}</span>
+                <span class="card-desc">{{ c.descricao }}</span>
+                <span class="card-saiba-mais">{{ c.acao }} <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+            {% endfor %}
+
+            <!-- Card fixo (front-end): não vem da rota -->
+            <a href="https://cvv.org.br/chat/" target="_blank" rel="noopener noreferrer" class="card-suap">
+                <i class="fa-regular fa-comments card-icon"></i>
+                <span class="card-title">Chat do CVV</span>
+                <span class="card-desc">Prefere escrever? O CVV também atende por chat e e-mail</span>
+                <span class="card-saiba-mais">Acessar o chat <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+        </div>
+
+        <div class="secao-titulo">
+            <i class="fa-solid fa-user-doctor"></i> APOIO PSICOLÓGICO NO SEU CAMPUS
+        </div>
+
+        <div class="passos">
+            {% for p in passos %}
+            <div class="passo">
+                <div class="passo-numero">{{ loop.index }}</div>
+                <div class="passo-texto"><strong>{{ p.titulo }}</strong>{{ p.descricao }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if session['tipo'] != 'psicologo' %}
+        <a href="{{ url_for('aluno.consultas') }}" class="ajuda-botao">
+            <i class="fa-solid fa-calendar-check"></i> Agendar consulta
+        </a>
+        {% else %}
+        <a href="{{ url_for('auth.area_psicologo') }}" class="ajuda-botao">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para o Painel
+        </a>
+        {% endif %}
+
+    </main>
 
 </body>
 </html>
