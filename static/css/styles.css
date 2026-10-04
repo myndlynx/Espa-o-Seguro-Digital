@@ -759,3 +759,215 @@ body {
     font-size: 13px;
     font-weight: bold;
 }
+
+/* ===== Espaço de Dicas (psicólogo) ===== */
+.sidebar-menu li a.menu-ativo {
+    background-color: #4772b3;
+}
+
+.dicas-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.dicas-subtitulo {
+    margin: 0 0 0 18px;
+    color: #8a94a6;
+    font-size: 14px;
+}
+
+.btn-nova-dica {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(150deg, #708fbd 0%, #017193 100%);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 24px;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(1, 113, 147, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-nova-dica:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(1, 113, 147, 0.38);
+}
+
+/* Mural: 1 card por linha */
+.mural-dicas {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 900px;
+}
+
+.card-dica {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 6px 24px rgba(23, 43, 77, 0.08);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-dica:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px rgba(23, 43, 77, 0.14);
+}
+
+.card-dica-icone {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(1, 113, 147, 0.10);
+    color: #017193;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+.card-dica h3 {
+    margin: 0 0 12px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #223047;
+}
+
+.card-dica-autor {
+    margin: 0 0 14px 0;
+    color: #017193;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-dica-texto {
+    position: relative;
+    margin: 0 0 12px 0;
+    color: #667085;
+    font-size: 15px;
+    text-align: justify;
+    line-height: 1.6;
+    white-space: pre-line;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+/* Sombreado no fim do texto longo */
+.card-dica-texto.recolhido::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 70px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff);
+    pointer-events: none;
+}
+
+.btn-ler-mais {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    background: rgba(1, 113, 147, 0.10);
+    color: #017193;
+    border: none;
+    border-radius: 999px;
+    padding: 9px 18px;
+    margin-bottom: 18px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-ler-mais:hover {
+    background: #017193;
+    color: #ffffff;
+}
+
+.btn-ler-mais[hidden] {
+    display: none;
+}
+
+.card-dica-rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid #eef1f4;
+    padding-top: 16px;
+    margin-top: auto;
+}
+
+.card-dica-data {
+    color: #8a94a6;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card-dica-acoes {
+    display: flex;
+    gap: 8px;
+}
+
+.dicas-vazio {
+    background: #ffffff;
+    border: 2px dashed #d5dde8;
+    border-radius: 28px;
+    padding: 56px 24px;
+    text-align: center;
+}
+
+.dicas-vazio-icone {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(1, 113, 147, 0.10);
+    color: #017193;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 18px auto;
+}
+
+.dicas-vazio h3 {
+    margin: 0 0 8px 0;
+    color: #223047;
+    font-size: 18px;
+}
+
+.dicas-vazio p {
+    margin: 0;
+    color: #8a94a6;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .dicas-topo {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-nova-dica {
+        justify-content: center;
+    }
+}
+

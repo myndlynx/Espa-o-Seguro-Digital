@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, flash
 from datetime import date, timedelta, datetime
-from banco import consultas_db, proximo_id, atualizar_consultas_concluidas
+from banco import consultas_db, proximo_id, atualizar_consultas_concluidas, dicas_db
 
 psicologo_bp = Blueprint('psicologo', __file__)
 
@@ -132,4 +132,4 @@ def psicologo_historico():
 @psicologo_bp.route('/psicologo/dicas')
 def psicologo_dicas():
     if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
-    return render_template('psicologo_dicas.html')
+    return render_template('psicologo_dicas.html', dicas=dicas_db)
