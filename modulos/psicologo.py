@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, flash
 from datetime import date, timedelta, datetime
-from banco import consultas_db, proximo_id, atualizar_consultas_concluidas, dicas_db
+from banco import consultas_db, proximo_id, atualizar_consultas_concluidas, dicas_db, proximo_id_dica
 
 psicologo_bp = Blueprint('psicologo', __file__)
 
@@ -70,7 +70,7 @@ def psicologo_agendamentos():
             try:
                 data_hora = datetime.strptime(f"{c['data']} {c['horario']}", "%d/%m/%Y %H:%M")
                 if data_hora <= agora:
-                    continue  # horário livre já passou, some da lista
+                    continue
             except ValueError:
                 pass
 
@@ -132,4 +132,41 @@ def psicologo_historico():
 @psicologo_bp.route('/psicologo/dicas')
 def psicologo_dicas():
     if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
-    return render_template('psicologo_dicas.html', dicas=dicas_db)
+
+    dicas_ordenadas = sorted(dicas_db, key=lambda d: d['id'], reverse=True)
+    return render_template('psicologo_dicas.html', dicas=dicas_ordenadas)
+
+@psicologo_bp.route('/psicologo/dicas/salvar', methods=['POST'])
+def salvar_dica():
+    if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
+
+    id_dica = request.form.get('id_dica', '').strip()
+    titulo = request.form.get('titulo', '').strip()
+    texto = request.form.get('texto', '').strip()
+
+    if not titulo or not texto:
+        flash("Preencha o título e o texto da dica.", "erro")
+        return redirect(url_for('psicologo.psicologo_dicas'))
+
+    if id_dica:
+        dica = next((d for d in dicas_db if str(d['id']) == id_dica), None)
+
+        if not dica or dica.get('psicologo_matricula') != session['usuario']:
+            flash("Você não tem permissão para editar esta dica.", "erro")
+            return redirect(url_for('psicologo.psicologo_dicas'))
+
+        dica['titulo'] = titulo
+        dica['texto'] = texto
+        flash("Dica atualizada com sucesso!", "sucesso")
+    else:
+        dicas_db.append({
+            "id": proximo_id_dica(),
+            "titulo": titulo,
+            "texto": texto,
+            "data": (datetime.utcnow() - timedelta(hours=3)).strftime('%d/%m/%Y'),
+            "autor": session['nome'],
+            "psicologo_matricula": session['usuario']
+        })
+        flash("Dica publicada com sucesso!", "sucesso")
+
+    return redirect(url_for('psicologo.psicologo_dicas'))

@@ -28,8 +28,8 @@ dicas_db = [
         "Se você dorme mal por muitos dias seguidos, acorda cansado mesmo dormindo bastante "
         "ou sente que o sono está afetando seus estudos e seu bem-estar, procure o "
         "atendimento psicológico do seu campus. Cuidar do sono também é cuidar da saúde mental."),
-        'data': '04/10/2026', 'autor': 'Dr. Carlos Silva'},
-    {"id": 2, "titulo": "Organize seus estudos", "texto": "Montar uma rotina de estudos ajuda a reduzir a ansiedade antes das provas. Separe blocos de 50 minutos com pausas curtas de 10 minutos, defina uma meta pequena para cada bloco e comece pelas matérias mais difíceis, quando você ainda está com a mente descansada. Evite deixar tudo para a véspera: estudar um pouco por dia é mais eficiente do que estudar muito em uma noite só. Cuide também do sono e da alimentação, porque o cérebro descansado aprende melhor.", "data": "04/10/2026", 'autor':'Dra. Ana Costa'}
+        'data': '04/10/2026', 'autor': 'Dr. Carlos Silva', 'psicologo_matricula': '202414610004'},
+    {"id": 2, "titulo": "Organize seus estudos", "texto": "Montar uma rotina de estudos ajuda a reduzir a ansiedade antes das provas. Separe blocos de 50 minutos com pausas curtas de 10 minutos, defina uma meta pequena para cada bloco e comece pelas matérias mais difíceis, quando você ainda está com a mente descansada. Evite deixar tudo para a véspera: estudar um pouco por dia é mais eficiente do que estudar muito em uma noite só. Cuide também do sono e da alimentação, porque o cérebro descansado aprende melhor.", "data": "04/10/2026", 'autor':'Dra. Ana Costa', 'psicologo_matricula': '202414610002'}
 ]
 
 
@@ -40,6 +40,14 @@ def proximo_id():
     if not consultas_db:
         return 1
     return max(c['id'] for c in consultas_db) + 1
+
+
+def proximo_id_dica():
+    """Gera o próximo ID de dica com base no maior ID já existente.
+    Mesma lógica de proximo_id(), só que para a lista dicas_db."""
+    if not dicas_db:
+        return 1
+    return max(d['id'] for d in dicas_db) + 1
 
 
 lista_campi = [
@@ -57,6 +65,56 @@ usuarios = [
     {"matricula": "202414610002", "senha": "12345p", "nome": "Dra. Ana Costa", "tipo": "psicologo", "campus": "Santa Rita"},
     {"matricula": "202414610004", "senha": "12345p", "nome": "Dr. Carlos Silva", "tipo": "psicologo", "campus": "João Pessoa"}
 ]
+
+# Conteúdo estático da página /ajuda (contatos de emergência e passo a passo)
+contatos_emergencia = [
+    {
+        'nome': 'CVV',
+        'descricao': 'Centro de Valorização da Vida. Atendimento gratuito para apoio emocional.',
+        'link': 'tel:188',
+        'acao': 'Ligar 188',
+        'icone': 'fa-solid fa-phone',
+        'numero': '188',
+        'destaque': True,
+        'externo': False
+    },
+    {
+        'nome': 'SAMU',
+        'descricao': 'Serviço de Atendimento Móvel de Urgência.',
+        'link': 'tel:192',
+        'acao': 'Ligar 192',
+        'icone': 'fa-solid fa-truck-medical',
+        'numero': '192',
+        'destaque': False,
+        'externo': False
+    },
+    {
+        'nome': 'Polícia Militar',
+        'descricao': 'Atendimento de emergência em situações que envolvam risco à segurança.',
+        'link': 'tel:190',
+        'acao': 'Ligar 190',
+        'icone': 'fa-solid fa-shield-halved',
+        'numero': '190',
+        'destaque': False,
+        'externo': False
+    }
+]
+
+passos_consulta = [
+    {
+        'titulo': 'Escolha o psicólogo',
+        'descricao': 'Escolha o profissional e a modalidade de atendimento disponível.'
+    },
+    {
+        'titulo': 'Escolha o horário',
+        'descricao': 'Selecione uma data e um horário disponíveis para a consulta.'
+    },
+    {
+        'titulo': 'Confirme a consulta',
+        'descricao': 'Confirme o agendamento para finalizar a marcação da consulta.'
+    }
+]
+
 
 def atualizar_consultas_concluidas():
     """Marca como 'Concluída' toda consulta 'Agendado' cujo horário já passou.

@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, session, render_template, url_for, flash
 from datetime import timedelta, date, datetime
-from banco import usuarios, lista_campi
+from banco import usuarios, lista_campi, contatos_emergencia, passos_consulta
 from modulos.auth import auth_bp
 from modulos.aluno import aluno_bp
 from modulos.psicologo import psicologo_bp
@@ -31,8 +31,14 @@ def dicas():
 
 @app.route('/ajuda')
 def ajuda():
-    if 'tipo' not in session: return redirect(url_for('auth.login'))
-    return render_template('ajuda.html')
+    if 'tipo' not in session:
+        return redirect(url_for('auth.login'))
+
+    return render_template(
+        'ajuda.html',
+        contatos=contatos_emergencia,
+        passos=passos_consulta
+    )
 
 @app.route('/objetivo')
 def objetivo():

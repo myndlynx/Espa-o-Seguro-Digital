@@ -47,10 +47,26 @@
                 </p>
             </div>
 
-            <a href="#" id="btnNovaDica" class="btn-nova-dica">
+            <button type="button" id="btnNovaDica" class="btn-nova-dica">
                 <i class="fa-solid fa-plus"></i> Nova dica
-            </a>
+            </button>
         </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category == 'sucesso' %}
+              <div style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 8px; border: 1px solid #c3e6cb; margin-bottom: 20px; font-size: 14px; font-weight: bold;">
+                  <i class="fa-solid fa-check-circle"></i> {{ message }}
+              </div>
+              {% elif category == 'erro' %}
+              <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; border: 1px solid #f5c6cb; margin-bottom: 20px; font-size: 14px; font-weight: bold;">
+                  <i class="fa-solid fa-circle-exclamation"></i> {{ message }}
+              </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
         {% if dicas %}
             <div class="mural-dicas">
@@ -67,13 +83,20 @@
                         </button>
                         <div class="card-dica-rodape">
                             <span class="card-dica-data"><i class="fa-solid fa-calendar-days"></i> {{ d.data }}</span>
-                            <div class="card-dica-acoes"></div>
+                            <div class="card-dica-acoes">
+                                {% if d.psicologo_matricula == session['usuario'] %}
+                                <button type="button" class="btn-editar-dica"
+                                        data-id="{{ d.id }}"
+                                        data-titulo="{{ d.titulo }}"
+                                        data-texto="{{ d.texto }}">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </button>
+                                {% endif %}
+                            </div>
                         </div>
                     </article>
                 {% endfor %}
             </div>
-
-            <script src="{{ url_for('static', filename='js/dicas_psicologo.js') }}"></script>
         {% else %}
             <div class="dicas-vazio">
                 <div class="dicas-vazio-icone"><i class="fa-regular fa-lightbulb"></i></div>
@@ -83,5 +106,28 @@
         {% endif %}
 
     </main>
+
+    <div class="modal-overlay" id="modalDica" hidden>
+        <div class="modal-dica">
+            <div class="modal-dica-cabecalho">
+                <h3 id="modalDicaTitulo"><i class="fa-solid fa-lightbulb"></i> Nova dica</h3>
+                <button type="button" class="modal-fechar" id="btnFecharModalDica" aria-label="Fechar">&times;</button>
+            </div>
+
+            <form method="POST" action="{{ url_for('psicologo.salvar_dica') }}" class="card" style="max-width: 100%; box-shadow: none; padding: 0; margin-bottom: 0;">
+                <input type="hidden" name="id_dica" id="inputIdDica" value="">
+
+                <label>Título:</label>
+                <input type="text" name="titulo" id="inputTituloDica" maxlength="100" required>
+
+                <label>Texto:</label>
+                <textarea name="texto" id="inputTextoDica" rows="7" maxlength="3000" required></textarea>
+
+                <button type="submit" id="btnSalvarDica">Publicar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dicas_psicologo.js') }}"></script>
 </body>
 </html>
