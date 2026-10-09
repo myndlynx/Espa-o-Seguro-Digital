@@ -170,3 +170,23 @@ def salvar_dica():
         flash("Dica publicada com sucesso!", "sucesso")
 
     return redirect(url_for('psicologo.psicologo_dicas'))
+
+@psicologo_bp.route('/psicologo/dicas/cancelar', methods=['POST'])
+def cancelar_dica():
+    if session.get('tipo') != 'psicologo': return redirect(url_for('auth.login'))
+
+    id_dica = request.form.get('id_dica', '').strip()
+    dica = next((d for d in dicas_db if str(d['id']) == id_dica), None)
+
+    if not dica:
+        flash("Dica não encontrada.", "erro")
+        return redirect(url_for('psicologo.psicologo_dicas'))
+
+    if dica.get('psicologo_matricula') != session['usuario']:
+        flash("Você não tem permissão para cancelar esta dica.", "erro")
+        return redirect(url_for('psicologo.psicologo_dicas'))
+
+    dicas_db.remove(dica)
+    flash("Dica cancelada com sucesso!", "sucesso")
+
+    return redirect(url_for('psicologo.psicologo_dicas'))
