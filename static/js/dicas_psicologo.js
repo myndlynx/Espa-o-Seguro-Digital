@@ -84,9 +84,50 @@ window.addEventListener("load", function () {
         }
     });
 
+    const modalCancelar = document.getElementById("modalCancelarDica");
+
+    function fecharModalCancelar() {
+        if (modalCancelar) {
+            modalCancelar.hidden = true;
+        }
+    }
+
+    if (modalCancelar) {
+        const inputIdCancelar = document.getElementById("cancelarDicaId");
+        const tituloCancelar = document.getElementById("cancelarDicaTitulo");
+        const btnConfirmarCancelar = document.getElementById("btnConfirmarCancelar");
+
+        document.querySelectorAll(".btn-cancelar-dica").forEach(function (botaoCancelar) {
+            botaoCancelar.addEventListener("click", function () {
+                inputIdCancelar.value = botaoCancelar.dataset.id;
+                tituloCancelar.textContent = '"' + botaoCancelar.dataset.titulo + '"';
+                btnConfirmarCancelar.disabled = false;
+                btnConfirmarCancelar.textContent = "Cancelar dica";
+                modalCancelar.hidden = false;
+            });
+        });
+
+        modalCancelar.querySelector("form").addEventListener("submit", function () {
+            btnConfirmarCancelar.disabled = true;
+            btnConfirmarCancelar.textContent = "Aguarde...";
+        });
+
+        document.getElementById("btnFecharModalCancelar").addEventListener("click", fecharModalCancelar);
+        document.getElementById("btnVoltarCancelar").addEventListener("click", fecharModalCancelar);
+
+        modalCancelar.addEventListener("click", function (evento) {
+            if (evento.target === modalCancelar) {
+                fecharModalCancelar();
+            }
+        });
+    }
+
     document.addEventListener("keydown", function (evento) {
-        if (evento.key === "Escape" && !modal.hidden) {
-            fecharModal();
+        if (evento.key === "Escape") {
+            if (!modal.hidden) {
+                fecharModal();
+            }
+            fecharModalCancelar();
         }
     });
 });
