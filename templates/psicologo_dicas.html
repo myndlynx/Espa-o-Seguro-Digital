@@ -91,6 +91,11 @@
                                         data-texto="{{ d.texto }}">
                                     <i class="fa-solid fa-pen"></i> Editar
                                 </button>
+                                <button type="button" class="btn-cancelar-dica"
+                                        data-id="{{ d.id }}"
+                                        data-titulo="{{ d.titulo }}">
+                                    <i class="fa-solid fa-trash"></i> Cancelar
+                                </button>
                                 {% endif %}
                             </div>
                         </div>
@@ -124,6 +129,26 @@
                 <textarea name="texto" id="inputTextoDica" rows="7" maxlength="3000" required></textarea>
 
                 <button type="submit" id="btnSalvarDica">Publicar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalCancelarDica" hidden>
+        <div class="modal-dica modal-confirmar">
+            <div class="modal-dica-cabecalho">
+                <h3><i class="fa-solid fa-triangle-exclamation" style="color: #dc3545;"></i> Cancelar dica</h3>
+                <button type="button" class="modal-fechar" id="btnFecharModalCancelar" aria-label="Fechar">&times;</button>
+            </div>
+
+            <p class="modal-confirmar-texto">
+                Tem certeza que deseja cancelar a dica <strong id="cancelarDicaTitulo"></strong>?
+                Ela será removida do Espaço de Dicas e deixará de aparecer para os alunos.
+            </p>
+
+            <form method="POST" action="{{ url_for('psicologo.cancelar_dica') }}" class="modal-confirmar-acoes">
+                <input type="hidden" name="id_dica" id="cancelarDicaId" value="">
+                <button type="button" class="btn-voltar-dica" id="btnVoltarCancelar">Voltar</button>
+                <button type="submit" class="btn-confirmar-cancelar" id="btnConfirmarCancelar">Cancelar dica</button>
             </form>
         </div>
     </div>
