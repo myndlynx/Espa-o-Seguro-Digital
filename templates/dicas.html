@@ -4,13 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dicas de Saúde</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">ESDI</div>
 
-    <h1>Dicas de Saúde</h1>
-    <p>Dicas de bem-estar, saúde mental e organização de estudos.</p>
+        <div class="sidebar-profile">
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #c9d8f0; font-size: 12px;">Bem-vindo(a),</span><br>
+                <b style="color: #fff; font-size: 14px;">{{ session['nome'] }}</b><br>
+                <small style="color: #c9d8f0; margin-top: 3px; display: inline-block;">
+                    <i class="fa-solid fa-location-dot"></i> Campus {{ session['campus'] }}
+                </small>
+            </div>
+        </div>
 
-    <a href="{{ url_for('auth.area_aluno') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('auth.area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('dicas') }}" class="menu-ativo"><i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE</a></li>
+            <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-handshake-angle"></i> PROCURAR AJUDA</a></li>
+            <li><a href="{{ url_for('objetivo') }}"><i class="fa-solid fa-bullseye"></i> OBJETIVO DO SITE</a></li>
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
 
+    <main class="conteudo-principal">
+
+        <div class="dicas-topo">
+            <div class="dicas-topo-texto">
+                <h2 class="secao-titulo" style="margin-bottom: 8px;">
+                    <i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE
+                </h2>
+                <p class="dicas-subtitulo">
+                    Dicas de bem-estar, saúde mental e organização de estudos.
+                </p>
+            </div>
+        </div>
+
+        {% if dicas %}
+            <div class="mural-dicas">
+                {% for d in dicas %}
+                    <article class="card-dica">
+                        <div class="card-dica-icone"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h3>{{ d.titulo }}</h3>
+                        <p class="card-dica-autor">
+                            <i class="fa-solid fa-user-doctor"></i> Por {{ d.autor }}
+                        </p>
+                        <p class="card-dica-texto">{{ d.texto }}</p>
+                        <button type="button" class="btn-ler-mais" hidden>
+                            Ler mais <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="card-dica-rodape">
+                            <span class="card-dica-data"><i class="fa-solid fa-calendar-days"></i> {{ d.data }}</span>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            <script src="{{ url_for('static', filename='js/dicas_psicologo.js') }}"></script>
+        {% else %}
+            <div class="dicas-vazio">
+                <div class="dicas-vazio-icone"><i class="fa-regular fa-lightbulb"></i></div>
+                <h3>Nenhuma dica publicada ainda</h3>
+                <p>Os psicólogos ainda não publicaram dicas. Volte em breve!</p>
+            </div>
+        {% endif %}
+
+    </main>
 </body>
 </html>
