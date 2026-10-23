@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, session, render_template, url_for, flash
 from datetime import timedelta, date, datetime
-from banco import usuarios, lista_campi, contatos_emergencia, passos_consulta, dicas_db
+from banco import usuarios, lista_campi, contatos_emergencia, passos_consulta, dicas_db, objetivo_site
 from modulos.auth import auth_bp
 from modulos.aluno import aluno_bp
 from modulos.psicologo import psicologo_bp
@@ -43,7 +43,12 @@ def ajuda():
 @app.route('/objetivo')
 def objetivo():
     if 'tipo' not in session: return redirect(url_for('auth.login'))
-    return render_template('objetivo.html')
+
+    return render_template(
+        'objetivo.html',
+        conteudo=objetivo_site,
+        perfil_atual=session.get('tipo')
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
