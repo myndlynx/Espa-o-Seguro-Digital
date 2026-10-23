@@ -116,6 +116,54 @@ passos_consulta = [
 ]
 
 
+# Conteúdo estático da página /objetivo (objetivo do site, recursos e perfis)
+objetivo_site = {
+    'titulo': 'Um lugar seguro para cuidar de você',
+    'resumo': (
+        'O sistema tem o objetivo de facilitar a comunicação e consulta entre alunos e '
+        'psicólogos das redes federais, visando o bem-estar dos discentes. O sistema '
+        '“Espaço Seguro Digital” oferece a possibilidade de marcar consultas '
+        'presencialmente, conversar com o psicólogo virtualmente, ver dicas e contatos de '
+        'emergência, bem como a polícia, bombeiros e ambulância.'
+    ),
+    'recursos': [
+        {
+            'icone': 'fa-solid fa-user-group',
+            'titulo': 'Consultas presenciais',
+            'descricao': 'Marque consultas presenciais com os psicólogos do seu campus.'
+        },
+        {
+            'icone': 'fa-solid fa-video',
+            'titulo': 'Conversa virtual',
+            'descricao': 'Converse com o psicólogo de forma virtual, escolhendo a modalidade online.'
+        },
+        {
+            'icone': 'fa-solid fa-lightbulb',
+            'titulo': 'Dicas de bem-estar',
+            'descricao': 'Veja dicas de saúde mental e bem-estar publicadas pelos psicólogos.'
+        },
+        {
+            'icone': 'fa-solid fa-phone-volume',
+            'titulo': 'Contatos de emergência',
+            'descricao': 'Acesse contatos de emergência, como polícia, bombeiros e ambulância.'
+        }
+    ],
+    'perfis': [
+        {
+            'tipo': 'aluno',
+            'nome': 'Para o aluno',
+            'icone': 'fa-solid fa-user-graduate',
+            'descricao': 'Marque e cancele consultas, acompanhe sua agenda e seu histórico, leia as dicas e acesse a página de ajuda.'
+        },
+        {
+            'tipo': 'psicologo',
+            'nome': 'Para o psicólogo',
+            'icone': 'fa-solid fa-user-doctor',
+            'descricao': 'Abra horários de atendimento, acompanhe os agendamentos e o histórico de consultas e publique dicas para os alunos.'
+        }
+    ]
+}
+
 def atualizar_consultas_concluidas():
     """Marca como 'Concluída' toda consulta 'Agendado' cujo horário já passou.
     Chamada tanto pelo módulo do aluno quanto pelo do psicólogo."""
