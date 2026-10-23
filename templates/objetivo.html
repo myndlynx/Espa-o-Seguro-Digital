@@ -4,15 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Objetivo do Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
-    <h1>Objetivo do Site</h1>
-    <p>Aqui ficará o conteúdo com o objetivo do site.</p>
-    
-    {% if session['tipo'] == 'psicologo' %}
-    <a href="{{ url_for('auth.area_psicologo') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
-    {% else %}
-    <a href="{{ url_for('auth.area_aluno') }}" style="padding: 10px 20px; background: #017193; color: white; text-decoration: none; border-radius: 5px;">Voltar para o Painel</a>
-    {% endif %}
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            ESDI
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-pic">
+                <i class="fa-solid fa-user" style="color: #ccc;"></i>
+            </div>
+            <div class="profile-name">
+                <span style="color: #c9d8f0; font-size: 12px;">Bem-vindo(a),</span><br>
+                <b style="color: #fff; font-size: 14px;">{{ session['nome'] }}</b><br>
+                <small style="color: #c9d8f0; margin-top: 3px; display: inline-block;">
+                    <i class="fa-solid fa-location-dot"></i> Campus {{ session['campus'] }}
+                </small>
+            </div>
+        </div>
+
+        <ul class="sidebar-menu">
+            {% if session['tipo'] == 'psicologo' %}
+            <li><a href="{{ url_for('auth.area_psicologo') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_agendamentos') }}"><i class="fa-solid fa-calendar-days"></i> AGENDAMENTOS</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_historico') }}"><i class="fa-solid fa-clock-rotate-left"></i> HISTÓRICO DE CONSULTAS</a></li>
+            <li><a href="{{ url_for('psicologo.psicologo_dicas') }}"><i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE</a></li>
+            {% else %}
+            <li><a href="{{ url_for('auth.area_aluno') }}"><i class="fa-solid fa-house"></i> INÍCIO</a></li>
+            <li><a href="{{ url_for('auth.agenda') }}"><i class="fa-regular fa-calendar-plus"></i> MINHA AGENDA</a></li>
+            <li><a href="{{ url_for('aluno.consultas') }}"><i class="fa-solid fa-user-group"></i> AGENDAR CONSULTA</a></li>
+            <li><a href="{{ url_for('dicas') }}"><i class="fa-solid fa-lightbulb"></i> DICAS DE SAÚDE</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('ajuda') }}"><i class="fa-solid fa-phone"></i> PROCURAR AJUDA</a></li>
+            <li><a href="{{ url_for('objetivo') }}" class="menu-ativo" aria-current="page"><i class="fa-solid fa-bullseye"></i> OBJETIVO DO SITE</a></li>
+            <li style="margin-top: auto;">
+                <a href="{{ url_for('auth.logout') }}" class="menu-sair"><i class="fa-solid fa-power-off"></i> SAIR</a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="conteudo-principal">
+
+        <div class="hero-banner">
+            <img src="{{ url_for('static', filename='imagens/Imagem_tela.jpeg') }}" alt="ESDI - Espaço Seguro Digital">
+            <span class="hero-selo"><i class="fa-solid fa-lock"></i> 100% sigiloso</span>
+            <div class="hero-texto">
+                <h1>Objetivo do Site</h1>
+                <p>Entenda para que serve o ESDI e o que você encontra por aqui.</p>
+            </div>
+        </div>
+
+        <section class="objetivo-destaque" aria-labelledby="objetivo-titulo">
+            <div class="objetivo-destaque-icone"><i class="fa-solid fa-heart-pulse"></i></div>
+            <div class="objetivo-destaque-texto">
+                <h2 id="objetivo-titulo">{{ conteudo.titulo }}</h2>
+                <p>{{ conteudo.resumo }}</p>
+            </div>
+        </section>
+
+        <h2 class="secao-titulo">
+            <i class="fa-solid fa-compass"></i> O QUE VOCÊ ENCONTRA AQUI
+        </h2>
+
+        <div class="grade-recursos">
+            {% for r in conteudo.recursos %}
+            <article class="recurso">
+                <i class="{{ r.icone }} card-icon"></i>
+                <h3 class="card-title">{{ r.titulo }}</h3>
+                <p class="card-desc">{{ r.descricao }}</p>
+            </article>
+            {% endfor %}
+        </div>
+
+        <h2 class="secao-titulo">
+            <i class="fa-solid fa-users"></i> PARA QUEM É O ESDI
+        </h2>
+
+        <div class="grade-perfis">
+            {% for p in conteudo.perfis %}
+            <article class="perfil-card{% if p.tipo == perfil_atual %} perfil-atual{% endif %}">
+                {% if p.tipo == perfil_atual %}
+                <span class="perfil-selo"><i class="fa-solid fa-circle-check"></i> Seu perfil</span>
+                {% endif %}
+                <i class="{{ p.icone }} card-icon"></i>
+                <h3 class="card-title">{{ p.nome }}</h3>
+                <p class="card-desc">{{ p.descricao }}</p>
+            </article>
+            {% endfor %}
+        </div>
+
+        {% if session['tipo'] == 'psicologo' %}
+        <a href="{{ url_for('auth.area_psicologo') }}" class="ajuda-botao">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para o Painel
+        </a>
+        {% else %}
+        <a href="{{ url_for('auth.area_aluno') }}" class="ajuda-botao">
+            <i class="fa-solid fa-arrow-left"></i> Voltar para o Painel
+        </a>
+        {% endif %}
+
+    </main>
+
 </body>
 </html>
